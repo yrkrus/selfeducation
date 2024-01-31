@@ -3,3 +3,6 @@ create_tovar
 
 calculator_for_pointer
 Калькулятор через указатели
+
+parsing_logs
+Парсинг и ротация логов в одно место

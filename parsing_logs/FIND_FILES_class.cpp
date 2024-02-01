@@ -128,13 +128,23 @@ string FindFiles::getSize(const string &path) const
 	return to_string(size / 1024 / 1024 ) + " Mb";
 }
 
-
-
 // сущестует ли файл\папка в готовом бэкапе
-bool FindFiles::IsExistBackup(const string &path)
+bool FindFiles::IsExistBackup(const string &pathbackup, const string &pathoriginal)
 {
 	namespace fs = std::filesystem;	
-	return (fs::exists(path) ? true : false);
+	
+	// проверим для папки
+	if (!fs::is_directory(pathbackup)) {
+		return (fs::exists(pathbackup) ? true : false);
+	}
+	else {
+		// проверим кол-во файлов в папке
+		unsigned int countoriginal, countbackup;
+		std::istringstream(getCountFiles(pathoriginal)) >> countoriginal;
+		std::istringstream(getCountFiles(pathbackup)) >> countbackup;
+
+		return (countbackup != countoriginal ? false : true);
+	}	
 }
 
 // отображение папок
@@ -331,7 +341,7 @@ bool FindFiles::getIsExistFolder(DestFolders types)
 	return false;
 }
 
-// создание списка для копирования\удаления файлов (при ListType::backup - ListBackup / ListType::backup - ListDelete )
+// создание списка для копирования\удаления файлов 
 void FindFiles::createList(ListType typelist, DestFolders types, unsigned short dayTTL)
 {
 	Logging log;
@@ -366,22 +376,23 @@ void FindFiles::createList(ListType typelist, DestFolders types, unsigned short 
 		switch (typelist)
 		{
 		case FindFiles::backup:  // список файлов которые пойдут в бэкап
-		{					
+		{
 			// проверим время
-			if (currentTime - fileTime < dayTTL * 86400) {
-				
+			if (currentTime - fileTime < dayTTL * 86400)
+			{
+
 				// запишем 
 				list.fileName = entry.path().filename().generic_string();
 				list.unixTime = fileTime;
 
 				listFindedFiles.push_back(list);
 
-				break;			
-			} 
+				break;
+			}
 
 			break;
 		}
-		case FindFiles::del:
+		case FindFiles::del:	// список файлов для удаления из оригинальных папок с логами
 		{
 			// проверим время
 			if (currentTime - fileTime > dayTTL * 86400)
@@ -397,9 +408,75 @@ void FindFiles::createList(ListType typelist, DestFolders types, unsigned short 
 
 			break;
 		}
-		}		
+		}
 	}
 	//cout << listFindedFiles; debug 	
+}
+
+// для формирования списка на удаление из LOG_FOLDER
+void FindFiles::createList(unsigned short dayTTL)
+{
+	Logging log;
+	namespace fs = std::filesystem;
+
+	// очищаем список с файлами
+	if (!listFindedFiles.empty()) listFindedFiles.clear();
+
+	FilesStruct list;
+
+	for (const auto &entry : fs::recursive_directory_iterator(LOG_FOLDER)) {
+		
+		if (entry.is_directory()) {
+			
+			log.setLog("<i>Просматриваем содержимое папки: " + entry.path().generic_string() + "</i>", false);			
+			cout << "Просматриваем содержимое папки: " << entry.path() << "\n";
+			
+		}
+		
+		// просматриваем только файлы, папки потом удалять будем
+		if (entry.is_regular_file()) {
+			// текущее время
+			time_t currentTime = time(0);
+			time_t fileTime = getTimeToUnix(entry.last_write_time());
+
+			if (currentTime - fileTime > dayTTL * 86400)
+			{
+				// запишем 
+				list.fileName = entry.path().generic_string();
+				list.unixTime = fileTime;
+
+				listFindedFiles.push_back(list);				
+			}
+		}
+	}	
+}
+
+// для формирования списка на удаление из LOG_FOLDER пустых папок
+void FindFiles::createList()
+{
+	Logging log;
+	namespace fs = std::filesystem;
+
+	// очищаем список с файлами
+	if (!listFindedFiles.empty()) listFindedFiles.clear();
+
+	FilesStruct list;
+
+	for (const auto &entry : fs::recursive_directory_iterator(LOG_FOLDER))
+	{
+		if (entry.is_directory())
+		{			
+			if (fs::is_empty(entry.path())) {
+				
+				// запишем 
+				list.fileName = entry.path().generic_string();
+				list.unixTime = 0;
+
+				listFindedFiles.push_back(list);
+			
+			}			
+		}		
+	}
 }
 
 
@@ -428,7 +505,7 @@ void FindFiles::Backup()
 			string backup = getDSTFolderBackup(destbackup);
 
 			// забэкапили ли ранее ? 
-			if (IsExistBackup(backup)) { continue; }
+			if (IsExistBackup(backup,destbackup)) { continue; }
 
 			if (fs::is_directory(destbackup)) {		// папка
 				
@@ -485,8 +562,7 @@ void FindFiles::Delete()
 		// очищаем 
 		for (auto it{ listFindedFiles.begin() }; it != listFindedFiles.end(); it++)	{
 			
-			const string destbackup = getDestFolders(static_cast<DestFolders>(i)) + "\\" + it->fileName;		
-			
+			const string destbackup = getDestFolders(static_cast<DestFolders>(i)) + "\\" + it->fileName;					
 
 			if (fs::is_directory(destbackup))
 			{		// папка
@@ -526,8 +602,45 @@ void FindFiles::Delete()
 	}
 
 	// список из нового местоположения лога (LOG_FOLDER)
+	showInfoVersion();
+	createList(FILES_TTL);
+	
+	// очищаем  
+	for (auto it{ listFindedFiles.begin()}; it != listFindedFiles.end(); it++) {
+		
+		try
+		{
+			cout << "Удаление файла " + it->fileName << "\n";
 
+			fs::permissions(it->fileName, fs::perms::all);
+			fs::remove(it->fileName);
 
+			log.setLog("Удален файл " + it->fileName, false);
+		}
+		catch (std::exception &error_message)
+		{
+			log.setLog("ОШИБКА! Не удается удалить файл " + it->fileName + " " + error_message.what(), true);
+		}
+	}
+	
+	createList();
+
+	for (auto it{ listFindedFiles.begin() }; it != listFindedFiles.end(); it++)
+	{
+		try
+		{
+			cout << "Удаление пустой папки " + it->fileName << "\n";
+
+			fs::permissions(it->fileName, fs::perms::all);
+			fs::remove(it->fileName);
+
+			log.setLog("Удалена пустая папка " + it->fileName, false);
+		}
+		catch (std::exception &error_message)
+		{
+			log.setLog("ОШИБКА! Не удается пустую папку " + it->fileName + " " + error_message.what(), true);
+		}
+	}
 }
 
 

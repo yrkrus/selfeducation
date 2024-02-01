@@ -2,7 +2,7 @@
 
 using std::string;
 
-extern const string version_programm		= "1.4 от 31.01.2024";
+extern const string version_programm		= "1.5 от 01.02.2024";
 
 extern const unsigned short FILES_TTL			= 30;			// время жизни при котором сохраняем файлы от текущей даты. Например СЕГОДНЯ - FILES_TTL(дней)
 extern const unsigned short FILES_ORIGINAL_TTL	= 3;			// время жизни которое оставляем в оригинальных логах

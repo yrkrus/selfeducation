@@ -20,7 +20,7 @@ class FindFiles
 private:
 
 	// сущестует ли файл\папка в готовом бэкапе
-	bool IsExistBackup(const string &path);
+	bool IsExistBackup(const string &pathbackup, const string &pathoriginal);
 
 public:
 	FindFiles() {};
@@ -57,7 +57,8 @@ public:
 	enum ListType
 	{
 		backup,
-		del
+		del,
+		del_backup
 	};
 
 	struct FilesStruct				// путь до файла + дата время его создания
@@ -80,6 +81,8 @@ public:
 
 	// создание списка для копирования\удаления файлов 
 	void createList(ListType typelist, DestFolders types, unsigned short dayTTL);
+	void createList(unsigned short dayTTL); // для формирования списка на удаление из LOG_FOLDER
+	void createList();					    // для формирования списка на удаление из LOG_FOLDER пустых папок
 
 	// создание бэкапа
 	void Backup();

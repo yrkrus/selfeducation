@@ -10,7 +10,7 @@ bool IsKPeriodic(const std::string &str, int kratnost) {
     int lenght = str.length();
 
     if (lenght % kratnost != 0) {
-        return true;
+        return false;
     }
 
     for (int i = 0; i < lenght - kratnost; ++i)

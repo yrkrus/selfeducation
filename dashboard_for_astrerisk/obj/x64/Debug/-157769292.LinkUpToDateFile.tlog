@@ -1,1 +1,0 @@
-g++ -o "/root/core_dashboards/core_dashboard/bin/x64/Debug/core_dashboard.out" -Wl,--no-undefined -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack /root/core_dashboards/core_dashboard/obj/x64/Debug/main.o

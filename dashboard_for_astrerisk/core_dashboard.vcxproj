@@ -131,7 +131,18 @@
     </IncludePath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="ActiveSip.cpp" />
+    <ClCompile Include="InternalFunction.cpp" />
+    <ClCompile Include="IVR.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Queue.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ActiveSip.h" />
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="InternalFunction.h" />
+    <ClInclude Include="IVR.h" />
+    <ClInclude Include="Queue.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile />

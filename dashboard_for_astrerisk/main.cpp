@@ -1,17 +1,21 @@
-﻿#include <cstdio>
-#include <iostream>
+﻿#include <iostream>
 #include <string>
 #include <unistd.h>
+#include "Constants.h"
+#include "InternalFunction.h";
 
-// constants (на случай быстрых изменений) | потом в отдельный *.h закинуть
-const char *cIVR[] = { "asterisk -rx \"core show channels verbose\" | grep Playback" };
-
-
+// asterisk очереди (ПОКА НЕ ИСПОЛЬЗУЕТСЯ)  
+//enum AsteriskQueue
+//{
+//    main_queue,     // основная очередь     5000
+//    lukoil_queue,   // очередь лукой        5050
+//};
 
 enum Commands
 {
     ivr,            // кто в IVR
-    current_queue   // текущая очередь
+    queue,          // текущая очередь
+    active_sip,     // какие активные sip зарегистрированы в очереди
 };
 
 // получить команду
@@ -19,15 +23,10 @@ Commands getCommand(char *ch) {
     std::string commands = static_cast<std::string> (ch);
 
     if (commands == "ivr")               return ivr;
-    if (commands == "current_queue")     return current_queue;
+    if (commands == "queue")             return queue;
+    if (commands == "active_sip")        return active_sip;
 
     return ivr;                         // default;
-}
-
-
-// создать + получить текущий IVR
-void getIVR(void) {
-    system(*cIVR);
 }
 
 int main(int argc, char *argv[])
@@ -46,22 +45,27 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-
     Commands ch = getCommand(argv[1]);
 
     // пошли запросики
     switch (ch)
     {
-        case(ivr): {
+        case(ivr): {                // запись в БД кто сейчас слушает IVR 
             // запрос
             getIVR();            
             break;
         }
-        case(current_queue): {
+        case(queue): {              // запись в БД кто ушел из IVR в очередь
             // запрос
+            getQueue();
             break;
-        }   
+        } 
+        case(active_sip): {         // запись в БД кто сейчас с кем разговариваети сколько по времени
+            // запрос
+            getActiveSip();
+            break;
+        }
     }
     
-    //return 0;
+    return 0;
 };

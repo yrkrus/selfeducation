@@ -3,26 +3,50 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebuggerType>NativeOnly</DebuggerType>
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
+    <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
+    <RemoteDebuggerCommandArguments>active_sip</RemoteDebuggerCommandArguments>
+    <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
+    <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
+    <RemoteDebuggerCommandArguments>active_sip</RemoteDebuggerCommandArguments>
+    <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
+    <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
+    <RemoteDebuggerCommandArguments>active_sip</RemoteDebuggerCommandArguments>
+    <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
+    <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
+    <RemoteDebuggerCommandArguments>active_sip</RemoteDebuggerCommandArguments>
+    <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
+    <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
+    <RemoteDebuggerCommandArguments>active_sip</RemoteDebuggerCommandArguments>
+    <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
+    <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
+    <RemoteDebuggerCommandArguments>active_sip</RemoteDebuggerCommandArguments>
+    <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
+    <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
+    <RemoteDebuggerCommandArguments>active_sip</RemoteDebuggerCommandArguments>
+    <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
+    <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
+    <RemoteDebuggerCommandArguments>active_sip</RemoteDebuggerCommandArguments>
+    <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

@@ -6,6 +6,7 @@
 //////////////////////////////////////////////////////
 
 #include <string>
+#include "Constants.h"
 
 #ifndef INTERNALFUNCTION_H
 #define INTERNALFUNCTION_H
@@ -15,5 +16,8 @@ void getIVR(void);								// создать + получить текущий IVR
 void getQueue(void);							// создать + получить текущую очередь
 void getActiveSip(void);						// создать + получить кто с кем разговаривает
 
+std::string getNumberQueue(CONSTANTS::AsteriskQueue queue);	// получение номера очереди
+
+std::string getTalkTime(std::string talk);	   // перевод временни из сек -> 00:00:00
 
 #endif //INTERNALFUNCTION_H

@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////
 //													//	        
-//			by Petrov Yuri 07.05.2024				//
+//			by Petrov Yuri 08.05.2024				//
 //    парсинг активных звонков которые в реалтайм	//
 //                  ведут разговор					//
 //													//	
@@ -26,8 +26,14 @@ namespace ACTIVE_SIP
 	struct Pacients
 	{
 		std::string phone		 { "null" };	// текущий номер телфеона с которым ведется беседа
-		std::string internal_sip { "null" };	//  внутренний sip который ведет беседу
+		std::string internal_sip { "null" };	// внутренний sip который ведет беседу
 		std::string talk_time	 { "null" };    // время развговора  потом в int переделать
+	};
+
+	struct Operators
+	{
+		std::string sip_number {"null"};	// номер sip орератора
+		std::vector<std::string> queue;		// очереди в которых сидит орператор
 	};
 
 	class Parsing
@@ -38,18 +44,21 @@ namespace ACTIVE_SIP
 
 		void show();
 		bool isExistList();
+		bool isExistListActiveOperators();
+		void createListActiveOperators();
 
 	private:
-		std::string findParsing(std::string str, ACTIVE_SIP::Currentfind find); // парсинг
-		std::vector<ACTIVE_SIP::Pacients> active_sip_list;
+		std::string findParsing(std::string str, Currentfind find, const std::string number_operator);  // парсинг
+		std::string findNumberSip(std::string &str);														// парсинг нахождения активного sip оператора
+
+		void findActiveOperators(const char *fileOperators, std::string queue);  						// парсинг #2 (для activeoperaots) 
+
+		std::vector<Pacients> active_sip_list;
+		std::vector<Operators>list_operators;
+		
 	};
 
-
-	class ActiveSip : protected Parsing
-	{
-
-
-	};
+	
 }
 
 

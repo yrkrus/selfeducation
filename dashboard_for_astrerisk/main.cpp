@@ -2,14 +2,8 @@
 #include <string>
 #include <unistd.h>
 #include "Constants.h"
-#include "InternalFunction.h";
+#include "InternalFunction.h"
 
-// asterisk очереди (ПОКА НЕ ИСПОЛЬЗУЕТСЯ)  
-//enum AsteriskQueue
-//{
-//    main_queue,     // основная очередь     5000
-//    lukoil_queue,   // очередь лукой        5050
-//};
 
 enum Commands
 {
@@ -31,7 +25,6 @@ Commands getCommand(char *ch) {
 
 int main(int argc, char *argv[])
 {
-
     setlocale(LC_ALL, "");
 
     if (argc == 1)

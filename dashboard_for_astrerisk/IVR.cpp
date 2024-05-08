@@ -6,8 +6,6 @@
 #include <string>
 
 
-using std::vector;
-
 // коструктор
 IVR::Parsing::Parsing(const char *fileIVR)
 {
@@ -79,7 +77,7 @@ std::string IVR::Parsing::findParsing(std::string str, Currentfind find)
 
 	bool isNewLine{ false };
 
-	for (int i = 0; i != str.length(); ++i)
+	for (size_t i = 0; i != str.length(); ++i)
 	{
 
 		if (isNewLine)
@@ -124,6 +122,9 @@ std::string IVR::Parsing::findParsing(std::string str, Currentfind find)
 		}
 		}
 	}
+	else {
+		return "null";
+	}	
 }
 
 

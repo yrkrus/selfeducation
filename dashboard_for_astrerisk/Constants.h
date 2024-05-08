@@ -14,7 +14,19 @@
 namespace CONSTANTS 
 {
 // debug 
-const bool DEBUG_MODE{ true };
+    const bool DEBUG_MODE{ false };
+// WKroot#791
+
+
+// asterisk очереди  
+enum AsteriskQueue
+{
+    main,       // основная очередь     5000
+    lukoil,     // очередь лукой        5050
+    COUNT = 2,
+};
+
+
 
 // for IVR
 const std::string cIVRCommands	= "Playback|lukoil";
@@ -28,9 +40,10 @@ const std::string cQueueName		= "Queue.txt";
 const std::string cQueueResponse	= "asterisk -rx \"core show channels verbose\" | grep -E \"" + cQueueCommands + "\" " + " | grep -v \"" + cQueueCommandsEx + "\" > " + cQueueName;
 
 // for ActiveSIP
-const std::string cActiveSipName	 = "ActiveSip.txt";
-const std::string cActiveSipResponse = "asterisk -rx \"core show channels concise\" > " + cActiveSipName;
-
+const std::string cActiveSipName				= "ActiveSip.txt";
+const std::string cActiveSipResponse			= "asterisk -rx \"core show channels concise\" > " + cActiveSipName;
+const std::string cActiveSipOperatorsName		= "ActiveSipOperators.txt";
+const std::string cActiveSipOperatorsResponse	= "asterisk -rx \"queue show %queue\" > " + cActiveSipOperatorsName;
 };
 
 

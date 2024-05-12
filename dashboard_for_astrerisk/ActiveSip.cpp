@@ -37,8 +37,6 @@ ACTIVE_SIP::Parsing::Parsing(const char *fileActiveSip)
 					if (line.find("Local/" + it->sip_number) != std::string::npos) {
 						if (line.find("Outgoing") == std::string::npos) {
 							
-							//ТУТ ОШИБКА НЕ ВСЕ СЧИТАЮТСЯ!!!							
-
 							Pacients pacient;
 
 							pacient.internal_sip = findParsing(line, ACTIVE_SIP::Currentfind::internal_sip_find, it->sip_number);
@@ -206,6 +204,11 @@ void ACTIVE_SIP::Parsing::findActiveOperators(const char *fileOperators, std::st
 	// разберем
 	while (std::getline(file, line))
 	{
+		// заносить активные CAllers не требуется
+		if (line.find("Callers") != std::string::npos) {
+			break;
+		}
+		
 		// проверим есть ли активный sip
 		if (line.find("Local/") != std::string::npos) {
 			// найдем активный sip

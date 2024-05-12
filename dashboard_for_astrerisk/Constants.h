@@ -1,12 +1,11 @@
 //////////////////////////////////////////////////////
 //													//	        
-//			by Petrov Yuri 07.05.2024				//
+//			by Petrov Yuri 12.05.2024				//
 //			    константные значения				//
 //													//	
 //////////////////////////////////////////////////////
 
 #include <string>
-
 
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
@@ -14,7 +13,7 @@
 namespace CONSTANTS 
 {
 // debug 
-    const bool DEBUG_MODE{ false };
+    const bool DEBUG_MODE{ true };
 // WKroot#791
 
 
@@ -44,6 +43,13 @@ const std::string cActiveSipName				= "ActiveSip.txt";
 const std::string cActiveSipResponse			= "asterisk -rx \"core show channels concise\" > " + cActiveSipName;
 const std::string cActiveSipOperatorsName		= "ActiveSipOperators.txt";
 const std::string cActiveSipOperatorsResponse	= "asterisk -rx \"queue show %queue\" > " + cActiveSipOperatorsName;
+
+//for MySQL
+const std::string cHOST       = "10.34.222.19";
+const std::string cBD         = "dashboard";
+const std::string cLOGIN      = "zabbix";
+const std::string cPASSWORD   = "UFGq4kZMNIMwxTzV";
+
 };
 
 

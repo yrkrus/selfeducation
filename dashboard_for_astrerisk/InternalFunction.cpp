@@ -4,6 +4,43 @@
 #include "Queue.h"
 #include "ActiveSip.h"
 #include <cmath>
+#include "mysql/mysql.h"
+
+
+// подключение к БД MySQL
+bool connectBD() {
+	MYSQL mysql;
+	
+	//mysql = mysql_init(nullptr);
+	
+	const char *host = CONSTANTS::cHOST.c_str();
+	const char *login = CONSTANTS::cLOGIN.c_str();
+	const char *pwd = CONSTANTS::cPASSWORD.c_str();
+	const char *bd = CONSTANTS::cBD.c_str();
+
+		
+	// Получаем дескриптор соединения
+		mysql_init(&mysql);		 
+		if (&mysql == nullptr)
+		{
+		// Если дескриптор не получен — выводим сообщение об ошибке
+			std::cout << "Error: can't create MySQL-descriptor\n";
+			return false;
+		}
+	
+		// Подключаемся к серверу
+		//if (!mysql_real_connect(&mysql,host,login,pwd,bd,NULL, NULL, 0))
+		//{
+		//	// Если нет возможности установить соединение с БД выводим сообщение об ошибке
+		//	std::cout << "Error: can't connect to database " << mysql_error(&mysql) << "\n";
+		//	return false;
+		//}
+		//else
+		//{
+		//	// Если соединение успешно установлено выводим фразу — "Success!"
+		//	return true;
+		//}
+}
 
 // парсинг номера телефона в нормальный вид
 std::string phoneParsing(std::string &phone)
@@ -37,12 +74,7 @@ void getIVR(void)
 
     // разбираем
     IVR::Parsing ivr(CONSTANTS::cIVRName.c_str());
-    ivr.show();
-
-    //if (ivr.isExistList()) {
-    //    // добавляем в mysql
-    //    ivr.show();
-    //}   
+    ivr.show();     
 }
 
 // создать + получить текущую очередь
@@ -92,49 +124,33 @@ std::string getNumberQueue(CONSTANTS::AsteriskQueue queue)
 	}
 }
 
+// перевод общего кол-ва секунда в 00:00:00 формат
 std::string getTalkTime(std::string talk)
 {
+	const unsigned int daysCount	= 24 * 3600;
+	const unsigned short hourCount	= 3600;
+	const unsigned short minCount	= 60;
+
+	std::string resultat;
+
+	int talk_time = std::stoi(talk);
+
+	int days, hour, min,sec;
+	std::string shour, smin, ssec;
+
+	days = hour = min = sec = 0;
+
+	days = static_cast<int>(std::floor((talk_time / daysCount)));		
+	hour = static_cast<int>(std::floor(((talk_time - (days * daysCount)) / hourCount)));	
+	min = static_cast<int>(std::floor(((talk_time - ((days * daysCount) + (hour * hourCount) )) / minCount)));
+	sec = static_cast<int>(std::floor((talk_time - ((days * daysCount) + (hour * hourCount) + (min * minCount)))));
+		
+	(hour < 10) ? shour = "0" + std::to_string(hour) : shour = std::to_string(hour);
+	(min < 10) ? smin = "0" + std::to_string(min) : smin = std::to_string(min);
+	(sec < 10) ? ssec = "0" + std::to_string(sec) : ssec = std::to_string(sec);
 	
-	int talk_time = std::stoi(talk);	
-	int days{ 0 }, hour{ 0 }, min{ 0 }, sec{ 0 };
-	days = static_cast<int>(std::floor((talk_time / (24 * 3600))));
-	hour = static_cast<int>(std::floor((talk_time / 3600)));
-	min = static_cast<int>(std::floor((talk_time / 60)));
-	
-	
-
-			//days: = Trunc(CurrentSec / (24 * 3600));
-			//	dec(CurrentSec, days * 24 * 3600);
-
-			//hour: = Trunc(CurrentSec / 3600);
-			//hourtmp: = IntToStr(hour);
-			//	if Length(hourtmp) = 1 then hourtmp : = '0' + hourtmp;
-			//	dec(CurrentSec, hour * 3600);
-
-
-			//min: = Trunc(CurrentSec / 60);
-			//mintmp: = IntToStr(min);
-			//	if Length(mintmp) = 1 then mintmp : = '0' + mintmp;
-			//	dec(CurrentSec, min * 60);
-
-			//sec: = CurrentSec;
-			//sectmp: = IntToStr(sec);
-			//	if Length(sectmp) = 1 then sectmp : = '0' + sectmp;
-
-	//if days < >0 then WorkingHours : = IntToStr(days) + ' дн ' + hourtmp + ':' + mintmp + ':' + sectmp
-	//else
-	//	begin
-	//	if hour < >0 then  WorkingHours : = hourtmp + ':' + mintmp + ':' + sectmp
-	//	else
-	//		begin
-	//		if min < >0 then WorkingHours : = '00:' + mintmp + ':' + sectmp
-	//		else WorkingHours: = '00:00:' + sectmp;
-	//end;
-	//end;
-
-	return "00:00:00";
+	resultat = shour + ":" + smin + ":" + ssec;	
+	return ((days == 0) ? resultat : resultat += std::to_string(days)+"d "+ resultat);	
 }
-
-
 
 

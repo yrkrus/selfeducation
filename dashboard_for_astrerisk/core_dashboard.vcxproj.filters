@@ -22,6 +22,12 @@
     <Filter Include="include_h">
       <UniqueIdentifier>{34a51258-0f14-4d7e-b5cf-77b0edafe02e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mysql">
+      <UniqueIdentifier>{c4a5eade-9dca-4467-8b25-d7f61c0b89a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mysql\mysql">
+      <UniqueIdentifier>{69182695-021c-40ec-bca8-10880ec7a8ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IVR.h">
@@ -38,6 +44,54 @@
     </ClInclude>
     <ClInclude Include="InternalFunction.h">
       <Filter>include_h</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\errmsg.h">
+      <Filter>mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\field_types.h">
+      <Filter>mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\my_command.h">
+      <Filter>mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\my_compress.h">
+      <Filter>mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\my_list.h">
+      <Filter>mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysql.h">
+      <Filter>mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysql_com.h">
+      <Filter>mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysql_time.h">
+      <Filter>mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysql_version.h">
+      <Filter>mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqld_error.h">
+      <Filter>mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlx_ername.h">
+      <Filter>mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlx_error.h">
+      <Filter>mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysqlx_version.h">
+      <Filter>mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysql\client_plugin.h">
+      <Filter>mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysql\plugin_auth_common.h">
+      <Filter>mysql\mysql</Filter>
+    </ClInclude>
+    <ClInclude Include="mysql\mysql\udf_registration_types.h">
+      <Filter>mysql\mysql</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -4,43 +4,48 @@
 #include "Queue.h"
 #include "ActiveSip.h"
 #include <cmath>
-#include "mysql/mysql.h"
+
+
+//#ifdef _WIN32
+//#include "mysql/mysql.h"
+//#elif __linux__
+#include <mysql/mysql.h>
+//#endif
+
+
+
 
 
 // подключение к БД MySQL
-bool connectBD() {
-	MYSQL mysql;
-	
-	//mysql = mysql_init(nullptr);
-	
+MYSQL *createConnectionBD()
+{
 	const char *host = CONSTANTS::cHOST.c_str();
 	const char *login = CONSTANTS::cLOGIN.c_str();
 	const char *pwd = CONSTANTS::cPASSWORD.c_str();
 	const char *bd = CONSTANTS::cBD.c_str();
-
-		
-	// Получаем дескриптор соединения
-		mysql_init(&mysql);		 
-		if (&mysql == nullptr)
-		{
-		// Если дескриптор не получен — выводим сообщение об ошибке
-			std::cout << "Error: can't create MySQL-descriptor\n";
-			return false;
-		}
 	
-		// Подключаемся к серверу
-		//if (!mysql_real_connect(&mysql,host,login,pwd,bd,NULL, NULL, 0))
-		//{
-		//	// Если нет возможности установить соединение с БД выводим сообщение об ошибке
-		//	std::cout << "Error: can't connect to database " << mysql_error(&mysql) << "\n";
-		//	return false;
-		//}
-		//else
-		//{
-		//	// Если соединение успешно установлено выводим фразу — "Success!"
-		//	return true;
-		//}
+	MYSQL *mysql = mysql_init(nullptr);
+	if (mysql == nullptr) {
+		// Если дескриптор не получен — выводим сообщение об ошибке
+		std::cout << "Error: can't create MySQL-descriptor\n";
+		return nullptr;
+	}
+
+	// Подключаемся к серверу
+	if (!mysql_real_connect(mysql, host, login, pwd, bd, NULL, NULL, 0))
+	{
+		// Если нет возможности установить соединение с БД выводим сообщение об ошибке
+		std::cout << "Error: can't connect to database " << bd << ". " << mysql_error(mysql) << "\n";
+		return nullptr;
+	}
+	else
+	{
+		return mysql;
+	}
 }
+
+
+
 
 // парсинг номера телефона в нормальный вид
 std::string phoneParsing(std::string &phone)

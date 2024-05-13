@@ -48,42 +48,50 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <RemoteRootDir>~/core_dashboards</RemoteRootDir>
-    <RemoteCopyIncludeDirectories>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(RemoteCopyIncludeDirectories)</RemoteCopyIncludeDirectories>
+    <RemoteCopyIncludeDirectories>
+    </RemoteCopyIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
     <RemoteRootDir>~/core_dashboards</RemoteRootDir>
-    <RemoteCopyIncludeDirectories>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(RemoteCopyIncludeDirectories)</RemoteCopyIncludeDirectories>
+    <RemoteCopyIncludeDirectories>
+    </RemoteCopyIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <RemoteRootDir>~/core_dashboards</RemoteRootDir>
-    <RemoteCopyIncludeDirectories>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(RemoteCopyIncludeDirectories)</RemoteCopyIncludeDirectories>
+    <RemoteCopyIncludeDirectories>
+    </RemoteCopyIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
     <RemoteRootDir>~/core_dashboards</RemoteRootDir>
-    <RemoteCopyIncludeDirectories>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(RemoteCopyIncludeDirectories)</RemoteCopyIncludeDirectories>
+    <RemoteCopyIncludeDirectories>
+    </RemoteCopyIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <RemoteRootDir>~/core_dashboards</RemoteRootDir>
-    <RemoteCopyIncludeDirectories>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(RemoteCopyIncludeDirectories)</RemoteCopyIncludeDirectories>
+    <RemoteCopyIncludeDirectories>
+    </RemoteCopyIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
     <RemoteRootDir>~/core_dashboards</RemoteRootDir>
-    <RemoteCopyIncludeDirectories>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(RemoteCopyIncludeDirectories)</RemoteCopyIncludeDirectories>
+    <RemoteCopyIncludeDirectories>
+    </RemoteCopyIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
     <RemoteRootDir>~/core_dashboards</RemoteRootDir>
-    <RemoteCopyIncludeDirectories>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(RemoteCopyIncludeDirectories)</RemoteCopyIncludeDirectories>
+    <RemoteCopyIncludeDirectories>
+    </RemoteCopyIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
     <RemoteRootDir>~/core_dashboards</RemoteRootDir>
-    <RemoteCopyIncludeDirectories>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(RemoteCopyIncludeDirectories)</RemoteCopyIncludeDirectories>
+    <RemoteCopyIncludeDirectories>
+    </RemoteCopyIncludeDirectories>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
@@ -93,42 +101,58 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <IncludePath>
     </IncludePath>
-    <LibraryPath>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(LibraryPath)</LibraryPath>
+    <LibraryPath>Z:\;$(LibraryPath)</LibraryPath>
+    <RemoteCopySourceMethod />
+    <ProjectPublicIncludePath>$(ProjectPublicIncludePath)</ProjectPublicIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <IncludePath>
     </IncludePath>
-    <LibraryPath>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(LibraryPath)</LibraryPath>
+    <LibraryPath>Z:\;$(LibraryPath)</LibraryPath>
+    <RemoteCopySourceMethod />
+    <ProjectPublicIncludePath>$(ProjectPublicIncludePath)</ProjectPublicIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <IncludePath>
     </IncludePath>
-    <LibraryPath>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(LibraryPath)</LibraryPath>
+    <LibraryPath>Z:\;$(LibraryPath)</LibraryPath>
+    <RemoteCopySourceMethod />
+    <ProjectPublicIncludePath>$(ProjectPublicIncludePath)</ProjectPublicIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <IncludePath>
     </IncludePath>
-    <LibraryPath>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(LibraryPath)</LibraryPath>
+    <LibraryPath>Z:\;$(LibraryPath)</LibraryPath>
+    <RemoteCopySourceMethod />
+    <ProjectPublicIncludePath>$(ProjectPublicIncludePath)</ProjectPublicIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>
     </IncludePath>
-    <LibraryPath>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(LibraryPath)</LibraryPath>
+    <LibraryPath>Z:\;$(LibraryPath)</LibraryPath>
+    <RemoteCopySourceMethod />
+    <ProjectPublicIncludePath>$(ProjectPublicIncludePath)</ProjectPublicIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>
     </IncludePath>
-    <LibraryPath>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(LibraryPath)</LibraryPath>
+    <LibraryPath>Z:\;$(LibraryPath)</LibraryPath>
+    <RemoteCopySourceMethod />
+    <ProjectPublicIncludePath>$(ProjectPublicIncludePath)</ProjectPublicIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <IncludePath>
     </IncludePath>
-    <LibraryPath>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(LibraryPath)</LibraryPath>
+    <LibraryPath>Z:\;$(LibraryPath)</LibraryPath>
+    <RemoteCopySourceMethod />
+    <ProjectPublicIncludePath>$(ProjectPublicIncludePath)</ProjectPublicIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <IncludePath>
     </IncludePath>
-    <LibraryPath>C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;$(LibraryPath)</LibraryPath>
+    <LibraryPath>Z:\;$(LibraryPath)</LibraryPath>
+    <RemoteCopySourceMethod />
+    <ProjectPublicIncludePath>$(ProjectPublicIncludePath)</ProjectPublicIncludePath>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="ActiveSip.cpp" />
@@ -136,108 +160,102 @@
     <ClCompile Include="IVR.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Queue.cpp" />
+    <ClCompile Include="SQLRequest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActiveSip.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="InternalFunction.h" />
     <ClInclude Include="IVR.h" />
-    <ClInclude Include="mysql\errmsg.h" />
-    <ClInclude Include="mysql\field_types.h" />
-    <ClInclude Include="mysql\mysql.h" />
-    <ClInclude Include="mysql\mysqld_error.h" />
-    <ClInclude Include="mysql\mysqlx_ername.h" />
-    <ClInclude Include="mysql\mysqlx_error.h" />
-    <ClInclude Include="mysql\mysqlx_version.h" />
-    <ClInclude Include="mysql\mysql\client_plugin.h" />
-    <ClInclude Include="mysql\mysql\plugin_auth_common.h" />
-    <ClInclude Include="mysql\mysql\udf_registration_types.h" />
-    <ClInclude Include="mysql\mysql_com.h" />
-    <ClInclude Include="mysql\mysql_time.h" />
-    <ClInclude Include="mysql\mysql_version.h" />
-    <ClInclude Include="mysql\my_command.h" />
-    <ClInclude Include="mysql\my_compress.h" />
-    <ClInclude Include="mysql\my_list.h" />
     <ClInclude Include="Queue.h" />
+    <ClInclude Include="SQLRequest.h" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile />
     <ClCompile />
     <ClCompile>
-      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>Z:\mysql;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>~/core_dashboards/core_dashboard/mysql;C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>-lmysqlclient;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile />
     <ClCompile />
     <ClCompile>
-      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>Z:\mysql;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>~/core_dashboards/core_dashboard/mysql;C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>-lmysqlclient;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <ClCompile />
     <ClCompile />
     <ClCompile>
-      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>Z:\mysql;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>~/core_dashboards/core_dashboard/mysql;C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>-lmysqlclient;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <ClCompile />
     <ClCompile />
     <ClCompile>
-      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>Z:\mysql;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>~/core_dashboards/core_dashboard/mysql;C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>-lmysqlclient;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile />
     <ClCompile />
     <ClCompile>
-      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>Z:\mysql;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>~/core_dashboards/core_dashboard/mysql;C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>-lmysqlclient;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile />
     <ClCompile />
     <ClCompile>
-      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>Z:\mysql;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>~/core_dashboards/core_dashboard/mysql;C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>-lmysqlclient;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile />
     <ClCompile />
     <ClCompile>
-      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>Z:\mysql;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>~/core_dashboards/core_dashboard/mysql;C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>-lmysqlclient;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <ClCompile />
     <ClCompile />
     <ClCompile>
-      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalIncludeDirectories>Z:\mysql;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>~/core_dashboards/core_dashboard/mysql;C:\c++\РАБОЧЕ ПРОГРАММЫ\dashboard_for_astrerisk\core_dashboard\mysql;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>-lmysqlclient;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

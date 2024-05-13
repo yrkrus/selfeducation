@@ -3,7 +3,8 @@
 #include <unistd.h>
 #include "Constants.h"
 #include "InternalFunction.h"
-
+#include "SQLRequest.h"
+//#include <mysql/mysql.h>
 
 
 // эти include потом убрать, они нужны для отладки только
@@ -42,7 +43,7 @@ Commands getCommand(char *ch) {
 
 int main(int argc, char *argv[])
 {
-    setlocale(LC_ALL, "");
+    setlocale(LC_ALL, "RUS");
 
     if (argc == 1)
     {
@@ -77,8 +78,35 @@ int main(int argc, char *argv[])
         }
         case(connect_bd):
         {      
-            std::cout << "connect BD ... ";
-            (connectBD()) ? std::cout << "OK\n" : std::cout << "ERROR\n";
+            SQL_REQUEST::SQL base;
+            if (base.isConnectedBD()) {
+                std::cout << "Connect UP\n";
+                base.query_test();
+            }
+            else {
+                std::cout << "Connect DOWN!\n";
+                
+            }
+
+            
+
+            
+           
+            
+
+            
+
+
+            /*MYSQL *mysql = createConnectionBD();
+            if (mysql != nullptr) {
+                std::cout << "SUCESS\n";
+            }
+            else {
+                std::cout << "ERROR\n";
+            }*/
+            
+
+            
             break;
         }        
         case(test):

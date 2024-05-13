@@ -13,7 +13,7 @@
 namespace CONSTANTS 
 {
 // debug 
-    const bool DEBUG_MODE{ true };
+    const bool DEBUG_MODE{ false };
 // WKroot#791
 
 
@@ -24,7 +24,6 @@ enum AsteriskQueue
     lukoil,     // очередь лукой        5050
     COUNT = 2,
 };
-
 
 
 // for IVR
@@ -44,7 +43,7 @@ const std::string cActiveSipResponse			= "asterisk -rx \"core show channels conc
 const std::string cActiveSipOperatorsName		= "ActiveSipOperators.txt";
 const std::string cActiveSipOperatorsResponse	= "asterisk -rx \"queue show %queue\" > " + cActiveSipOperatorsName;
 
-//for MySQL
+//for MySQL Connect
 const std::string cHOST       = "10.34.222.19";
 const std::string cBD         = "dashboard";
 const std::string cLOGIN      = "zabbix";

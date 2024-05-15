@@ -3,7 +3,9 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <iterator>
 #include "InternalFunction.h"
+#include "SQLRequest.h"
 
 
 // коструктор
@@ -37,10 +39,9 @@ QUEUE::Parsing::Parsing(const char *fileQueue)
 			}
 		}
 	}
-	else
-	{
-		//std::cout << "open file ... ERROR\n";
-	}
+
+	filequeue.close();
+	
 }
 
 // деструткор
@@ -61,19 +62,35 @@ bool QUEUE::Parsing::isExistList()
 
 void QUEUE::Parsing::show()
 {
-	if (!pacient_list.empty())
+	if (isExistList())
 	{
-
 		std::cout << "Line QUEUE is (" << pacient_list.size() << ")\n\n";
 
-		for (const auto &list : pacient_list)
-		{
-			std::cout << list.queue << " | " << list.phone << " >> " << list.waiting << "\n";
-		}
+		for (std::vector<QUEUE::Pacients>::iterator it = pacient_list.begin(); it != pacient_list.end(); ++it) {
+			std::cout << it->queue << " | " << it->phone << " >> " << it->waiting << "\n";
+		}		
 	}
 	else
 	{
 		std::cout << "QUEUE is empty!\n";
+	}
+}
+
+
+//добавление данных в БД
+void QUEUE::Parsing::insertData() 
+{
+	if (this->isExistList())
+	{
+		SQL_REQUEST::SQL base;
+
+		for (std::vector<QUEUE::Pacients>::iterator it = pacient_list.begin(); it != pacient_list.end(); ++it)
+		{
+			if (base.isConnectedBD())
+			{
+				base.insertQUEUE(it->queue.c_str(), it->phone.c_str(), it->waiting.c_str());
+			}
+		}
 	}
 }
 

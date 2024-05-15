@@ -4,6 +4,8 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include "SQLRequest.h"
+#include <iterator>
 
 
 // коструктор
@@ -31,17 +33,14 @@ IVR::Parsing::Parsing(const char *fileIVR)
 			}				
 		}		
 	}
-	else {
-		//std::cout << "open file ... ERROR\n";
-	}
+
+	fileivr.close();
 }
 
 // деструткор
 IVR::Parsing::~Parsing()
 {
-	if (!pacient_list.empty()) {
-		pacient_list.clear();
-	}	
+		
 }
 
 // проверка пустой ли список в номерами
@@ -52,22 +51,73 @@ bool IVR::Parsing::isExistList()
 
 
 void IVR::Parsing::show()
-{
-	if (!pacient_list.empty()) {
-		
+{	
+	if (this->isExistList()) {
 		std::cout << "Line IVR is (" << pacient_list.size() << ")\n\n";
-		
-		for (const auto &list : pacient_list)
-		{
-			std::cout << list.phone << " >> " << list.waiting << "\n";
-		}
+
+		for (std::vector<IVR::Pacients>::iterator it = pacient_list.begin(); it != pacient_list.end(); ++it) {
+			
+			std::cout << it->phone << " >> " << it->waiting << "\n";
+					 
+			{ // test
+				std::string subString1 = "00:00:4";
+				std::string subString2 = "00:00:5";
+				std::string subString3 = "00:03:";
+				std::string subString4 = "00:04:";
+				std::string subString5 = "00:05:";
+
+
+				size_t found1 = it->waiting.find(subString1);
+				size_t found2 = it->waiting.find(subString2);
+				size_t found3 = it->waiting.find(subString3);
+				size_t found4 = it->waiting.find(subString4);
+				size_t found5 = it->waiting.find(subString5);
+
+				if (found1 != std::string::npos)
+				{
+					std::cout << "найдено";
+				}
+				if (found2 != std::string::npos)
+				{
+					std::cout << "найдено";
+				}
+				if (found3 != std::string::npos)
+				{
+					std::cout << "найдено";
+				}
+				if (found4 != std::string::npos)
+				{
+					std::cout << "найдено";
+				}
+				if (found5 != std::string::npos)
+				{
+					std::cout << "найдено";
+				}
+			}		
+			
+
+		}			
 	}
 	else {
 		std::cout << "IVR is empty!\n";
 	}	
 }
 
+// добавление данных в БД
+void IVR::Parsing::insertData()
+{
+	if (this->isExistList()) {
+		SQL_REQUEST::SQL base;
 
+		for (std::vector<IVR::Pacients>::iterator it = pacient_list.begin(); it != pacient_list.end(); ++it)
+		{
+			if (base.isConnectedBD())
+			{
+				base.insertIVR(it->phone.c_str(), it->waiting.c_str());
+			}
+		}
+	}	
+}
 
 // парсинг строки
 std::string IVR::Parsing::findParsing(std::string str, Currentfind find)

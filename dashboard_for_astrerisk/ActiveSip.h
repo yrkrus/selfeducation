@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////
 //													//	        
-//			by Petrov Yuri 08.05.2024				//
+//			by Petrov Yuri 14.05.2024				//
 //    парсинг активных звонков которые в реалтайм	//
 //                  ведут разговор					//
 //													//	
@@ -47,6 +47,8 @@ namespace ACTIVE_SIP
 		bool isExistListActiveOperators();
 		void createListActiveOperators();
 
+		void updateData();		//добавление данных в БД
+
 	private:
 		std::string findParsing(std::string str, Currentfind find, const std::string number_operator);  // парсинг
 		std::string findNumberSip(std::string &str);														// парсинг нахождения активного sip оператора
@@ -54,11 +56,8 @@ namespace ACTIVE_SIP
 		void findActiveOperators(const char *fileOperators, std::string queue);  						// парсинг #2 (для activeoperaots) 
 
 		std::vector<Pacients> active_sip_list;
-		std::vector<Operators>list_operators;
-		
-	};
-
-	
+		std::vector<Operators>list_operators;		
+	};	
 }
 
 

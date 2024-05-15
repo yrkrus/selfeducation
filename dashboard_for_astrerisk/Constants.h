@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////
 //													//	        
-//			by Petrov Yuri 12.05.2024				//
+//			by Petrov Yuri 15.05.2024				//
 //			    константные значения				//
 //													//	
 //////////////////////////////////////////////////////
@@ -17,6 +17,12 @@ namespace CONSTANTS
 // WKroot#791
 
 
+/*ТЕКУЩИЕ ОШИБКИ*/
+/*
+1. при работе getIVR, попадают звонки больше >00:00:40 разобраться
+
+*/
+
 // asterisk очереди  
 enum AsteriskQueue
 {
@@ -26,10 +32,17 @@ enum AsteriskQueue
 };
 
 
+// шпаргалка
+// IVREXT - уход на оцените обслуживание
+// после IVREXT -> Spasibo - уход на спасибо что оценили
+
 // for IVR
 const std::string cIVRCommands	= "Playback|lukoil";
+const std::string cIVRCommandsEx1 = "IVREXT";
+const std::string cIVRCommandsEx2 = "Spasibo";
 const std::string cIVRName		= "IVR.txt";
-const std::string cIVRResponse	= "asterisk -rx \"core show channels verbose\" | grep -E \"" + cIVRCommands + "\" > " + cIVRName;
+const std::string cIVRResponse	= "asterisk -rx \"core show channels verbose\" | grep -E \"" + cIVRCommands + "\" " + " | grep -v \"" + cIVRCommandsEx1 + "\" " + " | grep -v \"" + cIVRCommandsEx2 + "\" > " + cIVRName;
+
 
 // for QUEUE
 const std::string cQueueCommands	= "Queue";

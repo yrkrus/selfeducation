@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////
 //													//	        
-//			by Petrov Yuri 07.05.2024				//
+//			by Petrov Yuri 14.05.2024				//
 //	      парсинг звонков попадающих в Очередь		//
 //													//	
 //////////////////////////////////////////////////////
@@ -36,12 +36,12 @@ namespace QUEUE
 		~Parsing();
 
 		bool isExistList();					// есть ли очередь	
-
 		void show();
+
+		void insertData();					//добавление данных в БД
 
 	private:
 		std::string findParsing(std::string str, QUEUE::Currentfind find); // парсинг  
-
 		std::vector<QUEUE::Pacients> pacient_list;
 	};
 }

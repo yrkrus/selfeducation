@@ -4,6 +4,8 @@
 #include "Queue.h"
 #include "ActiveSip.h"
 #include <cmath>
+#include <time.h>
+#include <chrono>
 
 
 //#ifdef _WIN32
@@ -11,39 +13,6 @@
 //#elif __linux__
 #include <mysql/mysql.h>
 //#endif
-
-
-
-
-
-// подключение к БД MySQL
-MYSQL *createConnectionBD()
-{
-	const char *host = CONSTANTS::cHOST.c_str();
-	const char *login = CONSTANTS::cLOGIN.c_str();
-	const char *pwd = CONSTANTS::cPASSWORD.c_str();
-	const char *bd = CONSTANTS::cBD.c_str();
-	
-	MYSQL *mysql = mysql_init(nullptr);
-	if (mysql == nullptr) {
-		// Если дескриптор не получен — выводим сообщение об ошибке
-		std::cout << "Error: can't create MySQL-descriptor\n";
-		return nullptr;
-	}
-
-	// Подключаемся к серверу
-	if (!mysql_real_connect(mysql, host, login, pwd, bd, NULL, NULL, 0))
-	{
-		// Если нет возможности установить соединение с БД выводим сообщение об ошибке
-		std::cout << "Error: can't connect to database " << bd << ". " << mysql_error(mysql) << "\n";
-		return nullptr;
-	}
-	else
-	{
-		return mysql;
-	}
-}
-
 
 
 
@@ -68,18 +37,19 @@ std::string phoneParsing(std::string &phone)
 	}
 };
 
-
 // создать + получить текущий IVR
-void getIVR(void)
+void getIVR()
 {   
 	if (!CONSTANTS::DEBUG_MODE) {
 		system(CONSTANTS::cIVRResponse.c_str());
-	};
-	  
+	};	  
 
     // разбираем
     IVR::Parsing ivr(CONSTANTS::cIVRName.c_str());
-    ivr.show();     
+	if (ivr.isExistList()) {
+		ivr.show();
+		ivr.insertData();
+	}
 }
 
 // создать + получить текущую очередь
@@ -90,8 +60,11 @@ void getQueue(void)
 	}
 
     QUEUE::Parsing queue(CONSTANTS::cQueueName.c_str());
-
-    queue.show();
+    
+	if (queue.isExistList()) {
+		queue.show();
+		queue.insertData();
+	}	
 }
 
 // создать + получить кто с кем разговаривает
@@ -102,11 +75,10 @@ void getActiveSip(void)
 	}
 
     ACTIVE_SIP::Parsing sip(CONSTANTS::cActiveSipName.c_str());
-
 	if (sip.isExistList()) { 
 		sip.show(); 
-	}
-	
+		sip.updateData();
+	}	
 }
 
 // получение номера очереди
@@ -156,6 +128,83 @@ std::string getTalkTime(std::string talk)
 	
 	resultat = shour + ":" + smin + ":" + ssec;	
 	return ((days == 0) ? resultat : resultat += std::to_string(days)+"d "+ resultat);	
+}
+
+// текущее время 
+std::string getCurrentDateTime()
+{	
+	auto now = std::chrono::system_clock::now();
+	std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+	struct std::tm *now_tm = std::localtime(&now_c);		
+
+	//формат год-месяц-день 00:00:00
+	std::string year = std::to_string((now_tm->tm_year + 1900));
+
+	std::string mon = std::to_string((now_tm->tm_mon + 1));
+	if (mon.length() == 1) { mon = "0" + mon; }
+
+	std::string day = std::to_string(now_tm->tm_mday);
+	if (day.length() == 1) { day = "0" + day; }
+
+	std::string hour = std::to_string(now_tm->tm_hour);
+	if (hour.length() == 1) { hour = "0" + hour; }
+
+	std::string min = std::to_string(now_tm->tm_min);
+	if (min.length() == 1) { min = "0" + min; }
+
+	std::string sec = std::to_string(now_tm->tm_sec);
+	if (sec.length() == 1) { sec = "0" + sec; }
+		
+	return year + "-" + mon + "-" + day + " " + hour + ":" + min + ":" + sec;
+}
+
+// текущее начало дня
+std::string getCurrentStartDay()
+{
+	auto now = std::chrono::system_clock::now();
+	std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+	struct std::tm *now_tm = std::localtime(&now_c);
+
+	//формат год-месяц-день 00:00:00
+	std::string year = std::to_string((now_tm->tm_year + 1900));
+
+	std::string mon = std::to_string((now_tm->tm_mon + 1));
+	if (mon.length() == 1) { mon = "0" + mon; }
+
+	std::string day = std::to_string(now_tm->tm_mday);
+	if (day.length() == 1) { day = "0" + day; }	
+
+	return year + "-" + mon + "-" + day + " 00:00:00" ;
+}
+
+// текущее время - 2 минута 
+std::string getCurretDateTimeAfterTreeMinutes()
+{
+	auto now = std::chrono::system_clock::now();
+	auto minutes = std::chrono::minutes(3);
+
+	std::time_t now_c = std::chrono::system_clock::to_time_t(now-minutes);
+	struct std::tm *now_tm = std::localtime(&now_c);
+
+	//формат год-месяц-день 00:00:00
+	std::string year = std::to_string((now_tm->tm_year + 1900));
+
+	std::string mon = std::to_string((now_tm->tm_mon + 1));
+	if (mon.length() == 1) { mon = "0" + mon; }
+
+	std::string day = std::to_string(now_tm->tm_mday);
+	if (day.length() == 1) { day = "0" + day; }	
+
+	std::string hour = std::to_string(now_tm->tm_hour);
+	if (hour.length() == 1) { hour = "0" + hour; }
+
+	std::string min = std::to_string(now_tm->tm_min);
+	if (min.length() == 1) { min = "0" + min; }
+
+	std::string sec = std::to_string(now_tm->tm_sec);
+	if (sec.length() == 1) { sec = "0" + sec; }
+
+	return year + "-" + mon + "-" + day + " " + hour + ":" + min + ":" + sec;
 }
 
 

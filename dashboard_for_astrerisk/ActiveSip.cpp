@@ -1,6 +1,7 @@
 #include "ActiveSip.h"
 #include "InternalFunction.h"
 #include "Constants.h"
+#include "SQLRequest.h"
 #include <vector>
 #include <fstream>
 #include <iostream>
@@ -57,10 +58,8 @@ ACTIVE_SIP::Parsing::Parsing(const char *fileActiveSip)
 			}
 		}		
 	}
-	else
-	{
-		//std::cout << "open file ... ERROR\n";
-	}
+
+	sip.close();	
 }
 
 // деструткор
@@ -98,18 +97,15 @@ void ACTIVE_SIP::Parsing::createListActiveOperators()
 
 void ACTIVE_SIP::Parsing::show()
 {
-	if (!active_sip_list.empty())
-	{
-
+	if (this->isExistList()) {
 		std::cout << "Line Active SIP is (" << active_sip_list.size() << ")\n\n";
 
 		for (const auto &list : active_sip_list)
 		{
 			std::cout << list.internal_sip << " >> " << list.phone << " (" << getTalkTime(list.talk_time) << ")\n";
-		}
-	}
-	else
-	{
+		}	
+	}	
+	else {
 		std::cout << "Active SIP is empty!\n";
 	}
 }
@@ -186,7 +182,6 @@ std::string ACTIVE_SIP::Parsing::findNumberSip(std::string &str)
 }
 
 
-
 // // парсинг #2 (для activeoperaots) 
 void ACTIVE_SIP::Parsing::findActiveOperators(const char *fileOperators, std::string queue)
 {
@@ -232,12 +227,32 @@ void ACTIVE_SIP::Parsing::findActiveOperators(const char *fileOperators, std::st
 				list_operators.push_back(active_operator);
 			}			
 		}
-	}	
+	}
+
+	file.close();
 }
 
 
 bool ACTIVE_SIP::Parsing::isExistListActiveOperators()
 {
 	return (!list_operators.empty() ? true : false );
+}
+
+
+//добавление данных в БД
+void ACTIVE_SIP::Parsing::updateData()
+{
+	if (this->isExistList())
+	{
+		SQL_REQUEST::SQL base;
+
+		for (std::vector<ACTIVE_SIP::Pacients>::iterator it = active_sip_list.begin(); it != active_sip_list.end(); ++it)
+		{
+			if (base.isConnectedBD())
+			{
+				base.updateQUEUE_SIP(it->phone.c_str(),it->internal_sip.c_str(),it->talk_time.c_str());
+			}
+		}
+	}
 }
 

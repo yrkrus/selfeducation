@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////
 //													//	        
-//			by Petrov Yuri 07.05.2024				//
+//			by Petrov Yuri 14.05.2024				//
 //	      парсинг звонков попадающих в IVR			//
 //													//	
 //////////////////////////////////////////////////////
@@ -24,8 +24,7 @@ namespace IVR
 	struct Pacients
 	{
 		std::string phone	{"null"};		// текущий номер телефона который в IVR слушает
-		std::string waiting {"null"};		// время в (сек) которое он слушает
-		bool isQueue		{ false };		// ушел в очередь по умолчанию false
+		std::string waiting {"null"};		// время в (сек) которое он слушает		
 	};
 
 	class Parsing 
@@ -34,9 +33,10 @@ namespace IVR
 		Parsing(const char *fileIVR);
 		~Parsing();		
 	
-		bool isExistList();						// ушел ли в очередь	
-		
+		bool isExistList();						// существет ли очередь IVR		
 		void show();
+
+		void insertData();						//добавление данных в БД
 
 	private:	
 		std::string findParsing(std::string str, IVR::Currentfind find); // парсинг  

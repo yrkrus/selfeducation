@@ -35,8 +35,9 @@ ACTIVE_SIP::Parsing::Parsing(const char *fileActiveSip)
 				for (std::vector<Operators>::iterator it = list_operators.begin(); it != list_operators.end(); ++it) {					
 				
 					// найдем текущий нужный sip 
-					if (line.find("Local/" + it->sip_number) != std::string::npos) {
-						if (line.find("Outgoing") == std::string::npos) {
+					if ((line.find("Local/" + it->sip_number) != std::string::npos) && 
+						((line.find("Ring") == std::string::npos) || (line.find("Down") == std::string::npos)) ) {
+						if (line.find("Outgoing") == std::string::npos)  {
 							
 							Pacients pacient;
 
@@ -143,6 +144,14 @@ std::string ACTIVE_SIP::Parsing::findParsing(std::string str, ACTIVE_SIP::Curren
 
 	if (!lines.empty())
 	{
+		
+	//	std::cout << "lines.size = " << lines.size() << "\n";
+		
+		// защита от sigmentation fault!
+		if (lines.size() < 10) {
+			return "null";
+		}
+		
 		switch (find)
 		{
 		case ACTIVE_SIP::Currentfind::phone_find:

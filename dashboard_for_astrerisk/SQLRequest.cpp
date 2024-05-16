@@ -137,10 +137,7 @@ bool SQL_REQUEST::SQL::isExistIVRPhone(const char *phone)
 	
 	const std::string query = "select count(phone) from ivr where phone = " 
 							  + std::string(phone) +" and date_time > '"
-							  + getCurretDateTimeAfterTreeMinutes()+"' order by date_time desc";
-	
-	std::cout << getCurrentDateTime()<<" | isExistIVRPhone(" << phone << ")\n";
-	std::cout << "sql( " << query << " )\n";
+							  + getCurretDateTimeAfterMinutes(3)+"' order by date_time desc";
 
 	if (mysql_query(&this->mysql, query.c_str() ) != 0)	{
 		// ошибка считаем что есть запись		
@@ -151,9 +148,7 @@ bool SQL_REQUEST::SQL::isExistIVRPhone(const char *phone)
 	// результат
 	MYSQL_RES *result = mysql_store_result(&this->mysql);
 	MYSQL_ROW row = mysql_fetch_row(result);	
-	mysql_free_result(result);
-
-	std::cout << "result = " << row[0]<<"\n\n\n";
+	mysql_free_result(result);	
 
 	return ( std::stoi(row[0]) == 0 ? false : true);	
 }
@@ -248,9 +243,37 @@ bool SQL_REQUEST::SQL::isExistQUEUE(const char *queue, const char *phone)
 		return true;
 	}
 
-	const std::string query = "select count(phone) from queue where number_queue = '" + std::string(queue) 
-							  +"' and phone = '" + std::string(phone)+"'" 
-							  + " and date_time > '" + getCurrentStartDay()+"'";
+	// проверка вдруг ведется разговор
+	{
+		const std::string query = "select count(phone) from queue where number_queue = '" + std::string(queue)
+			+ "' and phone = '" + std::string(phone) + "'"
+			+ " and date_time > '" + getCurrentStartDay() + "'"
+			+ " and answered ='1' order by date_time desc limit 1";
+
+		if (mysql_query(&this->mysql, query.c_str()) != 0)
+		{
+			// ошибка считаем что есть запись		
+			std::cerr << mysql_error(&this->mysql);
+			return true;
+		}
+
+		// результат
+		MYSQL_RES *result = mysql_store_result(&this->mysql);
+		MYSQL_ROW row = mysql_fetch_row(result);
+		mysql_free_result(result);
+
+		if (std::stoi(row[0]) >= 1)
+		{
+			return true;
+		}
+	}
+
+	// нет разговора проверяем повтрность
+	const std::string query = "select count(phone) from queue where number_queue = '" + std::string(queue)
+								+ "' and phone = '" + std::string(phone) + "'"
+								+ " and date_time > '" + getCurretDateTimeAfterMinutes(5) +"'"
+								+ " and answered ='0' and sip ='-1' order by date_time desc limit 1";
+							  
 
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
@@ -327,7 +350,7 @@ void SQL_REQUEST::SQL::updateQUEUE_SIP(const char *phone, const char *sip, const
 	{ // номер существует, обновляем данные
 		std::string id = std::to_string(getLastIDQUEUE(phone));
 
-		std::string query = "update queue set sip = '" + std::string(sip) + "', talk_time = '"+ getTalkTime(talk_time) + "' where phone = '" + std::string(phone) + "' and id ='" + std::string(id) + "'";
+		std::string query = "update queue set sip = '" + std::string(sip) + "', talk_time = '"+ getTalkTime(talk_time) + "', answered ='1' where phone = '" + std::string(phone) + "' and id ='" + std::string(id) + "'";
 
 		if (mysql_query(&this->mysql, query.c_str()) != 0)
 		{
@@ -342,7 +365,8 @@ void SQL_REQUEST::SQL::updateQUEUE_SIP(const char *phone, const char *sip, const
 bool SQL_REQUEST::SQL::isExistQUEUE_SIP(const char *phone)
 {
 	const std::string query = "select count(phone) from queue where phone = '" + std::string(phone)
-							+ "' and date_time > '" + getCurrentStartDay() + "'";
+							+ "' and date_time > '" + getCurrentStartDay() 
+							+ "' order by date_time desc limit 1";
 
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{

@@ -178,12 +178,12 @@ std::string getCurrentStartDay()
 }
 
 // текущее время - 2 минута 
-std::string getCurretDateTimeAfterTreeMinutes()
+std::string getCurretDateTimeAfterMinutes(int minutes)
 {
 	auto now = std::chrono::system_clock::now();
-	auto minutes = std::chrono::minutes(3);
+	auto minute = std::chrono::minutes(minutes);
 
-	std::time_t now_c = std::chrono::system_clock::to_time_t(now-minutes);
+	std::time_t now_c = std::chrono::system_clock::to_time_t(now-minute);
 	struct std::tm *now_tm = std::localtime(&now_c);
 
 	//формат год-месяц-день 00:00:00

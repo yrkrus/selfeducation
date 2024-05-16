@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////
 //													//	        
-//			by Petrov Yuri 13.05.2024				//
+//			by Petrov Yuri 15.05.2024				//
 //		внутренние функции не вошедшие в классы 	//
 //													//	
 //////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ std::string getTalkTime(std::string talk);						// перевод временни из сек -> 00
 // функции работы со временем (формат год-мес€ц-день 00:00:00 )
 std::string getCurrentDateTime();							// текущее врем€ 
 std::string getCurrentStartDay();							// текущее начало дн€
-std::string getCurretDateTimeAfterTreeMinutes();				// текущее врем€ - 3 минута 
+std::string getCurretDateTimeAfterMinutes(int minutes);			// текущее врем€ - 3 минута 
 
 
 #endif //INTERNALFUNCTION_H

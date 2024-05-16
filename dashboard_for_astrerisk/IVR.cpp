@@ -60,27 +60,23 @@ void IVR::Parsing::show()
 			std::cout << it->phone << " >> " << it->waiting << "\n";
 					 
 			{ // test
-				std::string subString1 = "00:00:4";
-				std::string subString2 = "00:00:5";
-				std::string subString3 = "00:03:";
-				std::string subString4 = "00:04:";
-				std::string subString5 = "00:05:";
+				
+				std::string subString3 = "00:01:";
+				std::string subString4 = "00:02:";
+				std::string subString5 = "00:03:";
+				std::string subString6 = "00:04:";
+				std::string subString7 = "00:05:";
 
 
-				size_t found1 = it->waiting.find(subString1);
-				size_t found2 = it->waiting.find(subString2);
+				
 				size_t found3 = it->waiting.find(subString3);
 				size_t found4 = it->waiting.find(subString4);
 				size_t found5 = it->waiting.find(subString5);
+				size_t found6 = it->waiting.find(subString6);
+				size_t found7 = it->waiting.find(subString7);
+				
 
-				if (found1 != std::string::npos)
-				{
-					std::cout << "найдено";
-				}
-				if (found2 != std::string::npos)
-				{
-					std::cout << "найдено";
-				}
+				
 				if (found3 != std::string::npos)
 				{
 					std::cout << "найдено";
@@ -93,6 +89,14 @@ void IVR::Parsing::show()
 				{
 					std::cout << "найдено";
 				}
+				if (found6 != std::string::npos)
+				{
+					std::cout << "найдено";
+				}
+				if (found7 != std::string::npos)
+				{
+					std::cout << "найдено";
+				}				
 			}		
 			
 

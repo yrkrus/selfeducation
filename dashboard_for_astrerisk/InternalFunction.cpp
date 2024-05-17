@@ -3,6 +3,7 @@
 #include "IVR.h"
 #include "Queue.h"
 #include "ActiveSip.h"
+#include "SQLRequest.h"
 #include <cmath>
 #include <time.h>
 #include <chrono>
@@ -205,6 +206,27 @@ std::string getCurretDateTimeAfterMinutes(int minutes)
 	if (sec.length() == 1) { sec = "0" + sec; }
 
 	return year + "-" + mon + "-" + day + " " + hour + ":" + min + ":" + sec;
+}
+
+// статистика // пока без класса, может потом в отдельный класс сделать
+void getStatistics()
+{
+	SQL_REQUEST::SQL base;
+
+	int totalcalls = base.getIVR_totalCalls();
+	int totalqueue = base.getQUEUE_Calls();
+	int totalqueue_answered = base.getQUEUE_Calls(true);
+	int totalqueue_no_answered = base.getQUEUE_Calls(false);
+
+
+	std::cout << "\n\n\tStatistics\n";
+	std::cout << "total calls IVR\t\t\t" << totalcalls<<"\n";
+	std::cout << "total queue answered\t\t" << totalqueue_answered << "\n";
+	std::cout << "total queue no answered\t\t" << totalqueue_no_answered << "\n";
+	std::cout << "response rate\t\t\t" << totalqueue_answered* 100 / static_cast<double>(totalqueue) << "%\n";
+	std::cout << "no answered rate\t\t" << totalqueue_no_answered * 100 / static_cast<double>(totalqueue_answered) << "%\n";
+
+
 }
 
 

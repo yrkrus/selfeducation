@@ -17,12 +17,6 @@ namespace CONSTANTS
 // WKroot#791
 
 
-/*рейсыхе ньхайх*/
-/*
-
-
-*/
-
 // asterisk НВЕПЕДХ  
 enum AsteriskQueue
 {

@@ -380,5 +380,104 @@ bool SQL_REQUEST::SQL::isExistQUEUE_SIP(const char *phone)
 	MYSQL_ROW row = mysql_fetch_row(result);
 	mysql_free_result(result);
 
+	mysql_close(&this->mysql);
+
 	return (std::stoi(row[0]) == 0 ? false : true);
+}
+
+// сколько всего позвонило на линию IVR
+int SQL_REQUEST::SQL::getIVR_totalCalls()
+{
+	if (!isConnectedBD())
+	{
+		std::cerr << "Error: can't connect to database\n";
+		return 0;
+	}
+
+	const std::string query = "select count(phone) from ivr where date_time > '" + getCurrentStartDay() + "'";
+
+	if (mysql_query(&this->mysql, query.c_str()) != 0)
+	{
+		// ошибка считаем что есть запись		
+		std::cerr << mysql_error(&this->mysql);
+		return 0;
+	}
+
+	// результат
+	MYSQL_RES *result = mysql_store_result(&this->mysql);
+	MYSQL_ROW row = mysql_fetch_row(result);
+	mysql_free_result(result);
+
+	mysql_close(&this->mysql);
+
+	return std::stoi(row[0]);
+}
+
+// сколько всего ответило и сколько пропущенных
+int SQL_REQUEST::SQL::getQUEUE_Calls(bool answered)
+{
+	if (!isConnectedBD())
+	{
+		std::cerr << "Error: can't connect to database\n";
+		return 0;
+	}
+	
+{
+	std::string query;
+		switch (answered)
+	{
+		case(true):
+		{
+			query = "select count(phone) from queue where date_time > '" + getCurrentStartDay() + "' and answered = '1'";
+			break;
+		}
+		case(false):
+		{
+			query = "select count(phone) from queue where date_time > '" + getCurrentStartDay() + "' and answered = '0'";
+			break;
+		}
+	}
+	
+	if (mysql_query(&this->mysql, query.c_str()) != 0)
+	{
+		// ошибка считаем что есть запись		
+		std::cerr << mysql_error(&this->mysql);
+		return 0;
+	}
+}
+	// результат
+	MYSQL_RES *result = mysql_store_result(&this->mysql);
+	MYSQL_ROW row = mysql_fetch_row(result);
+	mysql_free_result(result);
+
+	mysql_close(&this->mysql);
+
+	return std::stoi(row[0]);
+}
+
+// сколько всего было в очереди
+int SQL_REQUEST::SQL::getQUEUE_Calls()
+{
+	if (!isConnectedBD())
+	{
+		std::cerr << "Error: can't connect to database\n";
+		return 0;
+	}		
+	 const std::string query = "select count(phone) from queue where date_time > '" + getCurrentStartDay()+"'";
+
+	if (mysql_query(&this->mysql, query.c_str()) != 0)
+	{
+		// ошибка считаем что есть запись		
+		std::cerr << mysql_error(&this->mysql);
+		return 0;
+	}
+	
+	// результат
+	MYSQL_RES *result = mysql_store_result(&this->mysql);
+	MYSQL_ROW row = mysql_fetch_row(result);
+	mysql_free_result(result);
+
+	mysql_close(&this->mysql);
+
+	return std::stoi(row[0]);
 }

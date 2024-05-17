@@ -53,11 +53,12 @@ bool IVR::Parsing::isExistList()
 void IVR::Parsing::show()
 {	
 	if (this->isExistList()) {
-		std::cout << "Line IVR is (" << pacient_list.size() << ")\n\n";
+		std::cout << "Line IVR is (" << pacient_list.size() << ")\n";
+		std::cout << "phone" << "\t\t\t" << " wait time" << "\n";
 
 		for (std::vector<IVR::Pacients>::iterator it = pacient_list.begin(); it != pacient_list.end(); ++it) {
 			
-			std::cout << it->phone << " >> " << it->waiting << "\n";
+			std::cout << it->phone << "\t >> \t(" << it->waiting << ")\n";
 					 
 			{ // test
 				

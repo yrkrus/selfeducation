@@ -45,7 +45,7 @@ Commands getCommand(char *ch) {
 
 int main(int argc, char *argv[])
 {
-    setlocale(LC_ALL, "RUS");
+    setlocale(LC_ALL, "ru_RU.UTF-8");
 
     if (argc == 1)
     {
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     {
         case(ivr): {                // запись в БД кто сейчас слушает IVR 
             // запрос
-            getIVR();            
+            getIVR();   
             break;
         }
         case(queue): {              // запись в БД кто ушел из IVR в очередь
@@ -106,16 +106,16 @@ int main(int argc, char *argv[])
             int max{0};
 
             for (size_t i = 1; /*i <= TIK*/; ++i) {
-                //system("clear");
+                system("clear");
                 
                 auto start = std::chrono::steady_clock::now(); 
 
-                std::cout << "\n\n\niteration: " << i << "\n";
+                std::cout << "\n\n\n\n\t\titeration: \t" << i << "\n\n";
 
                 getIVR();
                 getQueue();
                 getActiveSip();            
-                
+                getStatistics();
                 
                 auto stop = std::chrono::steady_clock::now();         
 
@@ -129,7 +129,8 @@ int main(int argc, char *argv[])
 
                 //std::cout << "time average execute code: " << static_cast<double>(all / i) << " ms\n";
                 std::cout << "min execute = " << min << " ms | max execute = " << max << " ms\n";
-
+                
+                
                 sleep(1);
             }
             
@@ -149,37 +150,8 @@ int main(int argc, char *argv[])
 
             for (size_t i = 1; /*i <= TIK*/; ++i)
             {             
-                system("clear");
-                
-                std::cout << "\n";
-
-                auto start = std::chrono::steady_clock::now();
-
-                std::thread thread_ivr(getIVR);
-                std::thread thread_queue(getQueue);
-                
-                thread_ivr.join();
-                thread_queue.join();
-
-                // getIVR();
-               // getQueue();
-
-                auto stop = std::chrono::steady_clock::now();
-
-             
-
-                auto execute_ms = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-
-                std::cout << "\ntime execute code: " << execute_ms.count() << " ms\n";
-                all += execute_ms.count();
-
-                if (execute_ms.count() < min) { min = execute_ms.count(); }
-                if (execute_ms.count() > max) { max = execute_ms.count(); }
-
-                //std::cout << "time average execute code: " << static_cast<double>(all / i) << " ms\n";
-                std::cout << "min execute = " << min << " ms | max execute = " << max << " ms\n";
-
-                
+               
+                std::cout << "ok >> " << i << "\n";
                 sleep(1);
             }
 

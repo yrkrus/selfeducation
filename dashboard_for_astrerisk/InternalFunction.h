@@ -24,5 +24,7 @@ std::string getCurrentDateTime();							// текущее время
 std::string getCurrentStartDay();							// текущее начало дня
 std::string getCurretDateTimeAfterMinutes(int minutes);			// текущее время - 3 минута 
 
+// статистика // пока без класса, может потом в отдельный класс сделать
+void getStatistics();
 
 #endif //INTERNALFUNCTION_H

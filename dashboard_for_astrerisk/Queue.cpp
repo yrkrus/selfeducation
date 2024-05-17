@@ -64,11 +64,13 @@ void QUEUE::Parsing::show()
 {
 	if (isExistList())
 	{
-		std::cout << "Line QUEUE is (" << pacient_list.size() << ")\n\n";
+		std::cout << "Line QUEUE is (" << pacient_list.size() << ")\n";
+		std::cout << "queue" << "\t    \t" << "phone" << "\t \t" << " wait time" << "\n";
 
 		for (std::vector<QUEUE::Pacients>::iterator it = pacient_list.begin(); it != pacient_list.end(); ++it) {
-			std::cout << it->queue << " | " << it->phone << " >> " << it->waiting << "\n";
-		}		
+			std::cout << it->queue << "\t >> \t" << it->phone << "\t (" << it->waiting << ")\n";
+		}	
+
 	}
 	else
 	{

@@ -26,7 +26,7 @@ ACTIVE_SIP::Parsing::Parsing(const char *fileActiveSip)
 
 	if (sip.is_open())
 	{
-		// разберем  ТУТ ПОКА в 1 потоке все происходит потом сделать многопочную!!!  и сразу в БД!!
+		// разберем  ТУТ ПОКА в 1 потоке все происходит потом сделать многопочную!!! 
 		if (!list_operators.empty()) {		
 			
 			std::string line;
@@ -34,26 +34,28 @@ ACTIVE_SIP::Parsing::Parsing(const char *fileActiveSip)
 			{
 				for (std::vector<Operators>::iterator it = list_operators.begin(); it != list_operators.end(); ++it) {					
 				
-					// найдем текущий нужный sip 
-					if ((line.find("Local/" + it->sip_number) != std::string::npos) && 
-						((line.find("Ring") == std::string::npos) || (line.find("Down") == std::string::npos)) ) {
-						if (line.find("Outgoing") == std::string::npos)  {
-							
-							Pacients pacient;
+					if (line.find("Local/" + it->sip_number) != std::string::npos) {
+						if (line.find("Ring") == std::string::npos) {
+							if (line.find("Down") == std::string::npos) {
+								if (line.find("Outgoing") == std::string::npos)								{
 
-							pacient.internal_sip = findParsing(line, ACTIVE_SIP::Currentfind::internal_sip_find, it->sip_number);
-							pacient.phone = findParsing(line, ACTIVE_SIP::Currentfind::phone_find, it->sip_number);
-							pacient.talk_time = findParsing(line, ACTIVE_SIP::Currentfind::talk_time_find, it->sip_number);							
+									Pacients pacient;
 
-							// добавляем
-							if (pacient.internal_sip != "null" &&
-								pacient.phone != "null" &&
-								pacient.talk_time != "null")
-							{
-								active_sip_list.push_back(pacient);
-								break; // нет смысла дальше while т.к. нашли нужные данные
-							}
-						}
+									pacient.internal_sip = findParsing(line, ACTIVE_SIP::Currentfind::internal_sip_find, it->sip_number);
+									pacient.phone = findParsing(line, ACTIVE_SIP::Currentfind::phone_find, it->sip_number);
+									pacient.talk_time = findParsing(line, ACTIVE_SIP::Currentfind::talk_time_find, it->sip_number);
+
+									// добавляем
+									if (pacient.internal_sip != "null" &&
+										pacient.phone != "null" &&
+										pacient.talk_time != "null")
+									{
+										active_sip_list.push_back(pacient);
+										break; // нет смысла дальше while т.к. нашли нужные данные
+									}
+								}
+							}						
+						}			
 					}					
 				}				
 			}
@@ -99,11 +101,12 @@ void ACTIVE_SIP::Parsing::createListActiveOperators()
 void ACTIVE_SIP::Parsing::show()
 {
 	if (this->isExistList()) {
-		std::cout << "Line Active SIP is (" << active_sip_list.size() << ")\n\n";
+		std::cout << "Line Active SIP is (" << active_sip_list.size() << ")\n";
+		std::cout << "sip" << "\t    \t" << "phone" << "\t \t" << " talk time" << "\n";
 
 		for (const auto &list : active_sip_list)
 		{
-			std::cout << list.internal_sip << " >> " << list.phone << " (" << getTalkTime(list.talk_time) << ")\n";
+			std::cout << list.internal_sip << "\t >> \t" << list.phone << "\t (" << getTalkTime(list.talk_time) << ")\n";
 		}	
 	}	
 	else {
@@ -144,10 +147,7 @@ std::string ACTIVE_SIP::Parsing::findParsing(std::string str, ACTIVE_SIP::Curren
 
 	if (!lines.empty())
 	{
-		
-	//	std::cout << "lines.size = " << lines.size() << "\n";
-		
-		// защита от sigmentation fault!
+	  // защита от sigmentation fault!
 		if (lines.size() < 10) {
 			return "null";
 		}

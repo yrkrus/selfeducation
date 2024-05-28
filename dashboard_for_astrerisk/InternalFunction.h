@@ -22,7 +22,7 @@ std::string getTalkTime(std::string talk);						// перевод временни из сек -> 00
 // функции работы со временем (формат год-месяц-день 00:00:00 )
 std::string getCurrentDateTime();							// текущее время 
 std::string getCurrentStartDay();							// текущее начало дня
-std::string getCurretDateTimeAfterMinutes(int minutes);			// текущее время - 3 минута 
+std::string getCurrentDateTimeAfterMinutes(int minutes);			// текущее время - 3 минута 
 
 // статистика // пока без класса, может потом в отдельный класс сделать
 void getStatistics();

@@ -1,6 +1,7 @@
 #include "SQLRequest.h"
 #include "Constants.h"
 #include "InternalFunction.h"
+#include "IVR.h"
 #include <mysql/mysql.h>
 
 
@@ -99,7 +100,7 @@ void SQL_REQUEST::SQL::insertData_test()
 
 
 // добавление данных в таблицу IVR
-void SQL_REQUEST::SQL::insertIVR(const char *phone, const char *time)
+void SQL_REQUEST::SQL::insertIVR(const char *phone, const char *time, std::string callerid)
 {	
 	if (!isConnectedBD()) {
 		std::cerr << "Error: can't connect to database\n";
@@ -115,7 +116,7 @@ void SQL_REQUEST::SQL::insertIVR(const char *phone, const char *time)
 		return;
 	}
 	else {		
-		std::string query = "insert into ivr (phone,waiting_time) values ('" + std::string(phone) + "','" + std::string(time) + "')";
+		std::string query = "insert into ivr (phone,waiting_time,trunk) values ('" + std::string(phone) + "','" + std::string(time) + "','" + callerid + "')";
 		
 		if (mysql_query(&this->mysql, query.c_str()) != 0)
 		{
@@ -135,9 +136,9 @@ bool SQL_REQUEST::SQL::isExistIVRPhone(const char *phone)
 		return true;
 	}
 	
-	const std::string query = "select count(phone) from ivr where phone = " 
-							  + std::string(phone) +" and date_time > '"
-							  + getCurretDateTimeAfterMinutes(3)+"' order by date_time desc";
+	const std::string query = "select count(phone) from ivr where phone = '" 
+							  + std::string(phone) +"' and  date_time > '"
+							  + getCurrentDateTimeAfterMinutes(3)+"' order by date_time desc";
 
 	if (mysql_query(&this->mysql, query.c_str() ) != 0)	{
 		// ошибка считаем что есть запись		
@@ -271,7 +272,7 @@ bool SQL_REQUEST::SQL::isExistQUEUE(const char *queue, const char *phone)
 	// нет разговора проверяем повтрность
 	const std::string query = "select count(phone) from queue where number_queue = '" + std::string(queue)
 								+ "' and phone = '" + std::string(phone) + "'"
-								+ " and date_time > '" + getCurretDateTimeAfterMinutes(5) +"'"
+								+ " and date_time > '" + getCurrentDateTimeAfterMinutes(5) +"'"
 								+ " and answered ='0' and sip ='-1' order by date_time desc limit 1";
 							  
 

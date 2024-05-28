@@ -25,8 +25,8 @@ namespace SQL_REQUEST
 		void insertData_test();
 
 		//table IVR
-		void insertIVR(const char *phone, const char *time); // добавление данных в таблицу IVR
-		bool isExistIVRPhone(const char *phone);			 // существует ли такой уже номер в таблице IVR
+		void insertIVR(const char *phone, const char *time, std::string callerid ); // добавление данных в таблицу IVR
+		bool isExistIVRPhone(const char *phone);					// существует ли такой уже номер в таблице IVR
 		int getLastIDphone(const char *phone);				// получение последнего ID актуального
 		void updateIVR(const char *id, const char *phone, const char *time); // обновление данных в таблице IVR
 

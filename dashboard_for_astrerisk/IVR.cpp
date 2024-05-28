@@ -24,11 +24,14 @@ IVR::Parsing::Parsing(const char *fileIVR)
 		while (std::getline(fileivr, line)) {
 			Pacients pacient;						
 
-			pacient.phone	= findParsing(line, IVR::Currentfind::phone_find);
-			pacient.waiting = findParsing(line, IVR::Currentfind::waiting_find);
+			pacient.phone		= findParsing(line, IVR::Currentfind::phone_find);
+			pacient.waiting		= findParsing(line, IVR::Currentfind::waiting_find);
+			pacient.callerID	= getCallerID(findParsing(line, IVR::Currentfind::caller_id));
 
 			// добавляем
-			if (pacient.phone != "null" && pacient.waiting != "null") {
+			if (pacient.phone != "null" && 
+				pacient.waiting != "null" &&
+				pacient.callerID != null_caller) {
 				pacient_list.push_back(pacient);
 			}				
 		}		
@@ -43,6 +46,48 @@ IVR::Parsing::~Parsing()
 		
 }
 
+
+IVR::CallerID IVR::Parsing::getCallerID(std::string str)
+{
+	if (str.find("ivr-13")		 != std::string::npos)	return domru_220000;
+	if (str.find("druOUT220220") != std::string::npos)	return domru_220220;
+	if (str.find("sts_")		 != std::string::npos)	return sts;
+	if (str.find("221122")		 != std::string::npos)	return comagic;
+	return null_caller;
+}
+
+std::string IVR::Parsing::getCallerID(const CallerID &callerID)
+{
+	switch (callerID)
+	{
+		case(domru_220220): {
+			return "220220";
+			break;
+		}
+		case(domru_220000): {
+			return "220000";
+			break;
+		}
+		case(sts):
+		{
+			return "STS";
+			break;
+		}
+		case(comagic):
+		{
+			return "COMAGIC";
+			break;
+		}
+		case(null_caller):
+		{
+			return "null_caller";
+			break;
+		}	
+	}
+}
+
+
+
 // проверка пустой ли список в номерами
 bool IVR::Parsing::isExistList()
 {
@@ -54,12 +99,12 @@ void IVR::Parsing::show()
 {	
 	if (this->isExistList()) {
 		std::cout << "Line IVR is (" << pacient_list.size() << ")\n";
-		std::cout << "phone" << "\t\t\t" << " wait time" << "\n";
+		std::cout << "trunk" << "\t    \t" << "phone" << "\t \t" << " wait time" << "\n";
 
 		for (std::vector<IVR::Pacients>::iterator it = pacient_list.begin(); it != pacient_list.end(); ++it) {
-			
-			std::cout << it->phone << "\t >> \t(" << it->waiting << ")\n";
-					 
+				
+			std::cout << getCallerID(it->callerID) << "\t >> \t" << it->phone << "\t (" << it->waiting << ")\n";
+
 			{ // test
 				
 				std::string subString3 = "00:01:";
@@ -99,7 +144,6 @@ void IVR::Parsing::show()
 					std::cout << "найдено";
 				}				
 			}		
-			
 
 		}			
 	}
@@ -118,7 +162,7 @@ void IVR::Parsing::insertData()
 		{
 			if (base.isConnectedBD())
 			{
-				base.insertIVR(it->phone.c_str(), it->waiting.c_str());
+				base.insertIVR(it->phone.c_str(), it->waiting.c_str(), getCallerID(it->callerID));
 			}
 		}
 	}	
@@ -167,6 +211,11 @@ std::string IVR::Parsing::findParsing(std::string str, Currentfind find)
 		case IVR::Currentfind::waiting_find:
 		{
 			return lines[8];
+			break;
+		}
+		case IVR::Currentfind::caller_id:
+		{
+			return lines[0]+","+ lines[1];
 			break;
 		}
 

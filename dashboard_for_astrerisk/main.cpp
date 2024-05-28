@@ -13,10 +13,6 @@
 #include <chrono>
 
 
-
-
-
-
 enum Commands
 {
     ivr,            // кто в IVR
@@ -83,8 +79,8 @@ int main(int argc, char *argv[])
             SQL_REQUEST::SQL base;
             if (base.isConnectedBD()) {
                 std::cout << "Connect UP\n";
-                base.query_test();
-                base.insertIVR("+7927505233", "54");
+               // base.query_test();
+               // base.insertIVR("+7927505233", "54", IVR::null_caller);
             }
             else {
                 std::cout << "Connect DOWN!\n";
@@ -101,16 +97,18 @@ int main(int argc, char *argv[])
             
             int TIK = 6000;
             int avg;
-            int all{0};
+            size_t all{0};
             int min{1000};
             int max{0};
+           
 
             for (size_t i = 1; /*i <= TIK*/; ++i) {
+                
                 system("clear");
                 
-                auto start = std::chrono::steady_clock::now(); 
-
-                std::cout << "\n\n\n\n\t\titeration: \t" << i << "\n\n";
+                auto start = std::chrono::steady_clock::now();
+                
+                std::cout << "\n"+getCurrentDateTime() + "\titeration: \t" << i << "\n\n";
 
                 getIVR();
                 getQueue();
@@ -126,14 +124,20 @@ int main(int argc, char *argv[])
 
                 if (execute_ms.count() < min) { min = execute_ms.count(); }
                 if (execute_ms.count() > max) { max = execute_ms.count(); }
+                
+                std::cout << "avg execute = " << all / i << " ms | min execute = " << min << " ms | max execute = " << max << " ms\n";
+                
+                if (execute_ms.count() < 1000) { 
+                    sleep(1); 
+                } 
 
-                //std::cout << "time average execute code: " << static_cast<double>(all / i) << " ms\n";
-                std::cout << "min execute = " << min << " ms | max execute = " << max << " ms\n";
-                
-                
-                sleep(1);
-            }
-            
+                if (i >= 10800) {
+                    all = 0;
+                    i = 1;
+                    int min = 1000;
+                    int max = 0;
+                }
+            }            
             
             break;
         }
@@ -158,7 +162,6 @@ int main(int argc, char *argv[])
 
             break;
         }
-
         case(test3):
         {
 
@@ -195,8 +198,6 @@ int main(int argc, char *argv[])
 
             break;
         }
-
     }
-    
-    return 0;
+     return 0;
 };

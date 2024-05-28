@@ -7,6 +7,7 @@
 #include <cmath>
 #include <time.h>
 #include <chrono>
+#include <iomanip>
 
 
 //#ifdef _WIN32
@@ -179,7 +180,7 @@ std::string getCurrentStartDay()
 }
 
 // текущее время - 2 минута 
-std::string getCurretDateTimeAfterMinutes(int minutes)
+std::string getCurrentDateTimeAfterMinutes(int minutes)
 {
 	auto now = std::chrono::system_clock::now();
 	auto minute = std::chrono::minutes(minutes);
@@ -221,10 +222,13 @@ void getStatistics()
 
 	std::cout << "\n\n\tStatistics\n";
 	std::cout << "total calls IVR\t\t\t" << totalcalls<<"\n";
+	std::cout << "total queue \t\t\t" << totalqueue << "\n\n";
+
 	std::cout << "total queue answered\t\t" << totalqueue_answered << "\n";
-	std::cout << "total queue no answered\t\t" << totalqueue_no_answered << "\n";
-	std::cout << "response rate\t\t\t" << totalqueue_answered* 100 / static_cast<double>(totalqueue) << "%\n";
-	std::cout << "no answered rate\t\t" << totalqueue_no_answered * 100 / static_cast<double>(totalqueue_answered) << "%\n";
+	std::cout << "total queue no answered\t\t" << totalqueue_no_answered << "\n\n";
+	
+	std::cout << "response rate\t\t\t" << std::setprecision(4) << (totalqueue != 0  ? (totalqueue_answered * 100 / static_cast<double>(totalqueue)) : 0) << "%\n";
+	std::cout << "no answered rate\t\t" << std::setprecision(4) << (totalqueue_answered != 0 ? (totalqueue_no_answered * 100 / static_cast<double>(totalqueue_answered)) : 0) << "%\n";
 
 
 }

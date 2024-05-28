@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <iterator>
+#include <algorithm>
 
 // коструктор
 ACTIVE_SIP::Parsing::Parsing(const char *fileActiveSip)
@@ -31,7 +32,7 @@ ACTIVE_SIP::Parsing::Parsing(const char *fileActiveSip)
 			
 			std::string line;
 			while (std::getline(sip, line))
-			{
+			{	
 				for (std::vector<Operators>::iterator it = list_operators.begin(); it != list_operators.end(); ++it) {					
 				
 					if (line.find("Local/" + it->sip_number) != std::string::npos) {

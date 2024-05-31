@@ -47,7 +47,7 @@ IVR::Parsing::~Parsing()
 }
 
 
-IVR::CallerID IVR::Parsing::getCallerID(std::string str)
+IVR::CallerID IVR::getCallerID(std::string str)
 {
 	if (str.find("ivr-13")		 != std::string::npos)	return domru_220000;
 	if (str.find("druOUT220220") != std::string::npos)	return domru_220220;
@@ -56,7 +56,7 @@ IVR::CallerID IVR::Parsing::getCallerID(std::string str)
 	return null_caller;
 }
 
-std::string IVR::Parsing::getCallerID(const CallerID &callerID)
+std::string IVR::getCallerID(const CallerID &callerID)
 {
 	switch (callerID)
 	{

@@ -1,12 +1,14 @@
 //////////////////////////////////////////////////////
 //													//	        
-//			by Petrov Yuri 14.05.2024				//
+//			by Petrov Yuri 31.05.2024				//
 //				   SQL запросы	             		//
 //													//	
 //////////////////////////////////////////////////////
 #include <iostream>
 #include "Constants.h"
 #include <mysql/mysql.h>
+#include "IVR.h"
+#include "Queue.h"
 
 #ifndef SQLREQUEST_H
 #define	SQLREQUEST_H
@@ -29,6 +31,8 @@ namespace SQL_REQUEST
 		bool isExistIVRPhone(const char *phone);					// существует ли такой уже номер в таблице IVR
 		int getLastIDphone(const char *phone);				// получение последнего ID актуального
 		void updateIVR(const char *id, const char *phone, const char *time); // обновление данных в таблице IVR
+		
+
 
 		// table QUEUE
 		void insertQUEUE(const char *queue, const char *phone, const char *time); // добавление данных в таблицу QUEUE
@@ -37,10 +41,16 @@ namespace SQL_REQUEST
 		int getLastIDQUEUE(const char *phone);		// получение последнего ID актуального
 		void updateQUEUE_SIP(const char *phone, const char *sip, const char *talk_time); // обновление данных таблицы QUEUE о том с кем сейчас разговаривает оператор
 		bool isExistQUEUE_SIP(const char *phone);   // существует ли такой номер в таблице QUEUE чтобы добавить sip оператора который с разговор ведет
+		void updateQUEUE_fail(const std::vector<QUEUE::Pacients> &pacient_list); // обновление данных когда звонок не дождался своей очереди 
+		void updateQUEUE_fail();				// обновление данных когда звонок не дождался своей очереди 
+		void updateIVR_to_queue(const std::vector<QUEUE::Pacients> &pacient_list); // обновление данных когда у нас звонок из IVR попал в очередь
+		bool isExistQueueAfter20hours(); // проверка есть ли номера которые позвонили после 20:00
+		
 
 
 		// Статистика
 		int getIVR_totalCalls();			// сколько всего позвонило на линию IVR
+		int getIVR_totalCalls(const IVR::CallerID &trunk);			// сколько всего позвонило на линию IVR (поиск по trunk)
 		int getQUEUE_Calls(bool answered);  // сколько всего ответило и сколько пропущенных
 		int getQUEUE_Calls();				// сколько всего было в очереди
 

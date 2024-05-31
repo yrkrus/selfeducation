@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////
 //													//	        
-//			by Petrov Yuri 14.05.2024				//
+//			by Petrov Yuri 31.05.2024				//
 //	      парсинг звонков попадающих в ќчередь		//
 //													//	
 //////////////////////////////////////////////////////
@@ -37,12 +37,14 @@ namespace QUEUE
 
 		bool isExistList();					// есть ли очередь	
 		void show();
-
-		void insertData();					//добавление данных в Ѕƒ
+		void insertData();					// добавление данных в Ѕƒ
+		bool isExistQueueAfter20hours();	// проверка есть ли не отвеченные записи после 20:00
+		void updateQueueAfter20hours();		// обновление данных если звонок пришел того как нет активных операторов на линии
 
 	private:
 		std::string findParsing(std::string str, QUEUE::Currentfind find); // парсинг  
-		std::vector<QUEUE::Pacients> pacient_list;
+		std::vector<QUEUE::Pacients> pacient_list;	
+		
 	};
 }
 

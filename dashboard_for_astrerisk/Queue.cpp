@@ -59,7 +59,6 @@ bool QUEUE::Parsing::isExistList()
 	return (pacient_list.empty() ? false : true);
 }
 
-
 void QUEUE::Parsing::show()
 {
 	if (isExistList())
@@ -70,14 +69,12 @@ void QUEUE::Parsing::show()
 		for (std::vector<QUEUE::Pacients>::iterator it = pacient_list.begin(); it != pacient_list.end(); ++it) {
 			std::cout << it->queue << "\t >> \t" << it->phone << "\t (" << it->waiting << ")\n";
 		}	
-
 	}
 	else
 	{
 		std::cout << "QUEUE is empty!\n";
 	}
 }
-
 
 //добавление данных в БД
 void QUEUE::Parsing::insertData() 
@@ -93,6 +90,40 @@ void QUEUE::Parsing::insertData()
 				base.insertQUEUE(it->queue.c_str(), it->phone.c_str(), it->waiting.c_str());
 			}
 		}
+
+		// находим и обновляем данные если звонок был в очереди, но не дождался ответа от оператора
+		if (base.isConnectedBD()) 
+		{ 
+			base.updateQUEUE_fail(pacient_list);			
+		}	
+
+		// находим и обновляем данные когда у нас звонок из IVR попал в очередь
+		if (base.isConnectedBD())
+		{
+			base.updateIVR_to_queue(pacient_list);
+		}
+
+	}	
+}
+
+// проверка есть ли не отвеченные записи после 20:00
+bool QUEUE::Parsing::isExistQueueAfter20hours()
+{
+	SQL_REQUEST::SQL base;
+
+	if (base.isConnectedBD()) {
+		return base.isExistQueueAfter20hours();
+	}
+}
+
+// обновление данных если звонок пришел того как нет активных операторов на линии
+void QUEUE::Parsing::updateQueueAfter20hours()
+{
+	SQL_REQUEST::SQL base;
+
+	if (base.isConnectedBD())
+	{
+		base.updateQUEUE_fail();
 	}
 }
 

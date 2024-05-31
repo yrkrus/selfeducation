@@ -44,11 +44,7 @@ namespace IVR
 	{
 	public:
 		Parsing(const char *fileIVR);
-		~Parsing();	
-
-		CallerID getCallerID(std::string str);
-		std::string getCallerID(const CallerID &callerID);
-		
+		~Parsing();			
 	
 		bool isExistList();						// существет ли очередь IVR		
 		void show();
@@ -59,6 +55,9 @@ namespace IVR
 		std::string findParsing(std::string str, IVR::Currentfind find); // парсинг		
 		std::vector<IVR::Pacients> pacient_list;				
 	};
+
+	CallerID getCallerID(std::string str);
+	std::string getCallerID(const CallerID &callerID);
 }
 
 

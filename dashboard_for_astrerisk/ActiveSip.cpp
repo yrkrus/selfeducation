@@ -17,7 +17,7 @@ ACTIVE_SIP::Parsing::Parsing(const char *fileActiveSip)
 	
 	// есть ли активные SIP операторы в линии 
 	if (!isExistListActiveOperators()) {
-		std::cout << "Active SIP operators is empty!\n";
+		std::cout << "\nActive SIP operators is empty!\n";
 		return;
 	}
 
@@ -43,13 +43,13 @@ ACTIVE_SIP::Parsing::Parsing(const char *fileActiveSip)
 									Pacients pacient;
 
 									pacient.internal_sip = findParsing(line, ACTIVE_SIP::Currentfind::internal_sip_find, it->sip_number);
-									pacient.phone = findParsing(line, ACTIVE_SIP::Currentfind::phone_find, it->sip_number);
-									pacient.talk_time = findParsing(line, ACTIVE_SIP::Currentfind::talk_time_find, it->sip_number);
+									pacient.phone		 = findParsing(line, ACTIVE_SIP::Currentfind::phone_find, it->sip_number);
+									pacient.talk_time	 = findParsing(line, ACTIVE_SIP::Currentfind::talk_time_find, it->sip_number);
 
 									// добавляем
 									if (pacient.internal_sip != "null" &&
-										pacient.phone != "null" &&
-										pacient.talk_time != "null")
+										pacient.phone		 != "null" &&
+										pacient.talk_time	 != "null")
 									{
 										active_sip_list.push_back(pacient);
 										break; // нет смысла дальше while т.к. нашли нужные данные
@@ -155,27 +155,26 @@ std::string ACTIVE_SIP::Parsing::findParsing(std::string str, ACTIVE_SIP::Curren
 		
 		switch (find)
 		{
-		case ACTIVE_SIP::Currentfind::phone_find:
-		{
-			return phoneParsing(lines[7]);
-
-			break;
-		}
-		case ACTIVE_SIP::Currentfind::internal_sip_find:	// внутренний номер SIP (мы его и так знаем из функции)
-		{
-			return number_operator;
-			break;
-		}
-		case ACTIVE_SIP::Currentfind::talk_time_find:		// время разговора
-		{
-			return lines[9];
-			break;
-		}
-		default:
-		{
-			return "null";
-			break;
-		}
+			case ACTIVE_SIP::Currentfind::phone_find:
+			{
+				return phoneParsing(lines[7]);
+				break;
+			}
+			case ACTIVE_SIP::Currentfind::internal_sip_find:	// внутренний номер SIP (мы его и так знаем из функции)
+			{
+				return number_operator;
+				break;
+			}
+			case ACTIVE_SIP::Currentfind::talk_time_find:		// время разговора
+			{
+				return lines[9];
+				break;
+			}
+			default:
+			{
+				return "null";
+				break;
+			}
 		}
 	}
 	else {

@@ -277,4 +277,16 @@ void getStatistics()
 	std::cout << buffer.str();
 }
 
+// отображжение инфо что не возможно подключиться к бд
+void showErrorBD(const std::string str)
+{
+	std::cerr << str << " -> Error: can't connect to database " << CONSTANTS::cHOST << ":" << CONSTANTS::cBD << "\n";
+}
+
+// отображение инфо что пошла какая то ошибка
+void showErrorBD(const std::string str, MYSQL *mysql)
+{
+	std::cerr << str <<" " << mysql_error(mysql) <<"\n";
+}
+
 

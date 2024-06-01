@@ -27,14 +27,14 @@ void SQL_REQUEST::SQL::createMySQLConnect(MYSQL &mysql)
 	if (mysql_init(&mysql) == nullptr)
 	{
 		// ≈сли дескриптор не получен Ч выводим сообщение об ошибке
-		std::cout << "Error: can't create MySQL-descriptor\n";
+		std::cerr << "Error: can't create MySQL-descriptor\n";
 		return;
 	}
 
 	if (!mysql_real_connect(&mysql, host, login, pwd, bd, NULL, NULL, 0))
 	{
 		// ≈сли нет возможности установить соединение с Ѕƒ выводим сообщение об ошибке
-		std::cout << "Error: can't connect to database " << bd << ". " << mysql_error(&mysql) << "\n";
+		showErrorBD("SQL_REQUEST::SQL::createMySQLConnect -> Error: can't connect to database", &mysql);
 		return;
 	};
 
@@ -104,7 +104,7 @@ void SQL_REQUEST::SQL::insertData_test()
 void SQL_REQUEST::SQL::insertIVR(const char *phone, const char *time, std::string callerid)
 {	
 	if (!isConnectedBD()) {
-		std::cerr << "Error: can't connect to database\n";
+		showErrorBD("SQL_REQUEST::SQL::insertIVR");
 		return;
 	}	
 	
@@ -121,7 +121,7 @@ void SQL_REQUEST::SQL::insertIVR(const char *phone, const char *time, std::strin
 		
 		if (mysql_query(&this->mysql, query.c_str()) != 0)
 		{
-			std::cout << "Data (insertIVR) error\n";
+			showErrorBD("SQL_REQUEST::SQL::insertIVR -> Data (insertIVR) error -> query("+query+")", &this->mysql);
 		}	
 	}	
 
@@ -133,7 +133,7 @@ bool SQL_REQUEST::SQL::isExistIVRPhone(const char *phone)
 {
 	if (!isConnectedBD())
 	{
-		std::cerr << "Error: can't connect to database\n";
+		showErrorBD("SQL_REQUEST::SQL::isExistIVRPhone");
 		return true;
 	}
 	
@@ -143,7 +143,7 @@ bool SQL_REQUEST::SQL::isExistIVRPhone(const char *phone)
 
 	if (mysql_query(&this->mysql, query.c_str() ) != 0)	{
 		// ошибка считаем что есть запись		
-		std::cerr << mysql_error(&this->mysql);
+		showErrorBD("SQL_REQUEST::SQL::isExistIVRPhone -> query(" + query + ")", &this->mysql);
 		return true;
 	}
 
@@ -151,6 +151,7 @@ bool SQL_REQUEST::SQL::isExistIVRPhone(const char *phone)
 	MYSQL_RES *result = mysql_store_result(&this->mysql);
 	MYSQL_ROW row = mysql_fetch_row(result);	
 	mysql_free_result(result);	
+
 
 	return ( std::stoi(row[0]) == 0 ? false : true);	
 }
@@ -160,7 +161,7 @@ int SQL_REQUEST::SQL::getLastIDphone(const char *phone)
 {	
 	if (!isConnectedBD())
 	{
-		std::cerr << "Error: can't connect to database\n";
+		showErrorBD("SQL_REQUEST::SQL::getLastIDphone");
 		return -1;
 	}
 
@@ -171,13 +172,13 @@ int SQL_REQUEST::SQL::getLastIDphone(const char *phone)
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
 		// ошибка считаем что нет записи		
-		std::cerr << mysql_error(&this->mysql);
+		showErrorBD("SQL_REQUEST::SQL::getLastIDphone -> query(" + query + ")", &this->mysql);
 		return -1;
 	}
 
 	MYSQL_RES *result = mysql_store_result(&this->mysql);
 	MYSQL_ROW row = mysql_fetch_row(result);
-	mysql_free_result(result);
+	mysql_free_result(result);	
 
 	return std::stoi(row[0]);
 }
@@ -187,7 +188,7 @@ void SQL_REQUEST::SQL::updateIVR(const char *id,const char *phone, const char *t
 {
 	if (!isConnectedBD())
 	{
-		std::cerr << "Error: can't connect to database\n";
+		showErrorBD("SQL_REQUEST::SQL::updateIVR");
 		return;
 	}
 
@@ -195,7 +196,7 @@ void SQL_REQUEST::SQL::updateIVR(const char *id,const char *phone, const char *t
 	
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
-		std::cout << "Data (updateIVR) error\n";
+		showErrorBD("SQL_REQUEST::SQL::updateIVR -> Data (updateIVR) error -> query(" + query + ")",&this->mysql);
 	};
 	
 
@@ -207,7 +208,7 @@ void SQL_REQUEST::SQL::insertQUEUE(const char *queue, const char *phone, const c
 {
 	if (!isConnectedBD())
 	{
-		std::cerr << "Error: can't connect to database\n";
+		showErrorBD("SQL_REQUEST::SQL::insertQUEUE");
 		return;
 	}
 
@@ -228,7 +229,7 @@ void SQL_REQUEST::SQL::insertQUEUE(const char *queue, const char *phone, const c
 
 		if (mysql_query(&this->mysql, query.c_str()) != 0)
 		{
-			std::cout << "Data (insertQUEUE) error\n";
+			showErrorBD("SQL_REQUEST::SQL::insertQUEUE -> Data (insertQUEUE) error -> query(" + query + ")", &this->mysql);
 		}
 	}
 
@@ -241,14 +242,14 @@ bool SQL_REQUEST::SQL::isExistQUEUE(const char *queue, const char *phone)
 {
 	if (!isConnectedBD())
 	{
-		std::cerr << "Error: can't connect to database\n";
+		showErrorBD("SQL_REQUEST::SQL::isExistQUEUE");
 		return true;
 	}
 	
 	// нет разговора провер€ем повтрность
 	const std::string query = "select count(phone) from queue where number_queue = '" + std::string(queue)
 		+ "' and phone = '" + std::string(phone) + "'"
-		+ " and date_time > '" + getCurrentDateTimeAfterMinutes(15) + "'" //тут типа ок, но врем€ не затрагиваетс€ последние 6 мин
+		+ " and date_time > '" + getCurrentDateTimeAfterMinutes(15) + "'" //тут типа ок, но врем€ не затрагиваетс€ последние 15 мин
 		//+ " and date_time > '" + getCurrentDateTime() + "'"
 		+ " and answered ='0' and fail='0' order by date_time desc limit 1";
 
@@ -256,7 +257,7 @@ bool SQL_REQUEST::SQL::isExistQUEUE(const char *queue, const char *phone)
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
 		// ошибка считаем что есть запись		
-		std::cerr << mysql_error(&this->mysql);
+		showErrorBD("SQL_REQUEST::SQL::isExistQUEUE -> query("+query+")", &this->mysql);
 		return true;
 	}
 
@@ -278,7 +279,7 @@ bool SQL_REQUEST::SQL::isExistQUEUE(const char *queue, const char *phone)
 		if (mysql_query(&this->mysql, query.c_str()) != 0)
 		{
 			// ошибка считаем что есть запись		
-			std::cerr << mysql_error(&this->mysql);
+			showErrorBD("SQL_REQUEST::SQL::isExistQUEUE -> query(" + query + ")", &this->mysql);
 			return true;
 		}
 
@@ -289,7 +290,7 @@ bool SQL_REQUEST::SQL::isExistQUEUE(const char *queue, const char *phone)
 
 		if (std::stoi(row[0]) >= 1) {
 			return true;
-		}
+		}	
 
 		return (std::stoi(row[0]) == 0 ? false : true);
 	}
@@ -301,7 +302,7 @@ void SQL_REQUEST::SQL::updateQUEUE(const char *id, const char *phone, const char
 {
 	if (!isConnectedBD())
 	{
-		std::cerr << "Error: can't connect to database\n";
+		showErrorBD("SQL_REQUEST::SQL::updateQUEUE");
 		return;
 	}
 
@@ -309,8 +310,8 @@ void SQL_REQUEST::SQL::updateQUEUE(const char *id, const char *phone, const char
 
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
-		std::cout << "Data (updateQUEUE) error\n";
-	};
+		showErrorBD("SQL_REQUEST::SQL::updateQUEUE -> Data (updateQUEUE) error -> query(" + query + ")", &this->mysql);
+	}
 
 	mysql_close(&this->mysql);
 }
@@ -320,7 +321,7 @@ int SQL_REQUEST::SQL::getLastIDQUEUE(const char *phone)
 {
 	if (!isConnectedBD())
 	{
-		std::cerr << "Error: can't connect to database\n";
+		showErrorBD("SQL_REQUEST::SQL::getLastIDQUEUE");
 		return -1;
 	}
 
@@ -331,13 +332,13 @@ int SQL_REQUEST::SQL::getLastIDQUEUE(const char *phone)
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
 		// ошибка считаем что нет записи		
-		std::cerr << mysql_error(&this->mysql);
+		showErrorBD("SQL_REQUEST::SQL::getLastIDQUEUE -> query("+query+")",&this->mysql);
 		return -1;
 	}
 
 	MYSQL_RES *result = mysql_store_result(&this->mysql);
 	MYSQL_ROW row = mysql_fetch_row(result);
-	mysql_free_result(result);
+	mysql_free_result(result);	
 
 	return std::stoi(row[0]);
 }
@@ -347,7 +348,7 @@ void SQL_REQUEST::SQL::updateQUEUE_SIP(const char *phone, const char *sip, const
 {
 	if (!isConnectedBD())
 	{
-		std::cerr << "Error: can't connect to database\n";
+		showErrorBD("SQL_REQUEST::SQL::updateQUEUE_SIP");
 		return;
 	}
 
@@ -360,7 +361,7 @@ void SQL_REQUEST::SQL::updateQUEUE_SIP(const char *phone, const char *sip, const
 
 		if (mysql_query(&this->mysql, query.c_str()) != 0)
 		{
-			std::cout << "Data (updateQUEUE_SIP) error\n";
+			showErrorBD("SQL_REQUEST::SQL::updateQUEUE_SIP -> Data (updateQUEUE_SIP) error -> query("+query+")", &this->mysql);
 		};
 
 		mysql_close(&this->mysql);		
@@ -370,6 +371,12 @@ void SQL_REQUEST::SQL::updateQUEUE_SIP(const char *phone, const char *sip, const
 // существует ли такой номер в таблице QUEUE чтобы добавить sip оператора который с разговор ведет
 bool SQL_REQUEST::SQL::isExistQUEUE_SIP(const char *phone)
 {
+	if (!isConnectedBD())
+	{
+		showErrorBD("SQL_REQUEST::SQL::isExistQUEUE_SIP");
+		return true;
+	}
+	
 	const std::string query = "select count(phone) from queue where phone = '" + std::string(phone)
 							+ "' and date_time > '" + getCurrentStartDay() 
 							+ "' order by date_time desc limit 1";
@@ -377,7 +384,7 @@ bool SQL_REQUEST::SQL::isExistQUEUE_SIP(const char *phone)
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
 		// ошибка считаем что есть запись		
-		std::cerr << mysql_error(&this->mysql);
+		showErrorBD("SQL_REQUEST::SQL::isExistQUEUE_SIP -> query(" + query + ")", &this->mysql);
 		return true;
 	}
 
@@ -386,7 +393,7 @@ bool SQL_REQUEST::SQL::isExistQUEUE_SIP(const char *phone)
 	MYSQL_ROW row = mysql_fetch_row(result);
 	mysql_free_result(result);
 
-	mysql_close(&this->mysql);
+	//mysql_close(&this->mysql);
 
 	return (std::stoi(row[0]) == 0 ? false : true);
 }
@@ -408,6 +415,12 @@ void SQL_REQUEST::SQL::updateQUEUE_fail(const std::vector<QUEUE::Pacients> &paci
 		}		
 	}	
 
+	if (!isConnectedBD())
+	{
+		showErrorBD("SQL_REQUEST::SQL::updateQUEUE_fail");
+		return;
+	}
+
 	// обновл€ем данные
 	std::string query = "update queue set fail = '1' where date_time > '" + getCurrentStartDay() + "' and answered = '0'"
 		+ " and sip = '-1' and phone not in ("+ list_phone +")";
@@ -415,7 +428,7 @@ void SQL_REQUEST::SQL::updateQUEUE_fail(const std::vector<QUEUE::Pacients> &paci
 	
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
-		std::cout << "Data (updateQUEUE_fail) error\n";
+		showErrorBD("SQL_REQUEST::SQL::updateQUEUE_fail -> Data (updateQUEUE_fail) error -> query(" + query + ")", &this->mysql);
 	};
 
 	mysql_close(&this->mysql);
@@ -427,10 +440,15 @@ void SQL_REQUEST::SQL::updateQUEUE_fail()
 	// обновл€ем данные
 	std::string query = "update queue set fail = '1' where date_time > '" + getCurrentDateTimeAfter20hours() + "' and answered = '0' and sip = '-1' ";
 
+	if (!isConnectedBD())
+	{
+		showErrorBD("SQL_REQUEST::SQL::updateQUEUE_fail");
+		return;
+	}
 
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
-		std::cout << "Data (updateQUEUE_fail) error\n";
+		showErrorBD("SQL_REQUEST::SQL::updateQUEUE_fail -> Data (updateQUEUE_fail) error -> query(" + query + ")", &this->mysql);
 	};
 
 	mysql_close(&this->mysql);
@@ -457,10 +475,15 @@ void SQL_REQUEST::SQL::updateIVR_to_queue(const std::vector<QUEUE::Pacients> &pa
 	// обновл€ем данные
 	std::string query = "update ivr set to_queue = '1' where date_time > '" + getCurrentDateTimeAfterMinutes(5)+"' and phone in(" + list_phone + ") and to_queue = '0'";
 
+	if (!isConnectedBD())
+	{
+		showErrorBD("SQL_REQUEST::SQL::updateIVR_to_queue");
+		return;
+	}
 
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
-		std::cout << "Data (updateIVR_to_queue) error\n";
+		showErrorBD("SQL_REQUEST::SQL::updateIVR_to_queue -> Data (updateIVR_to_queue) error -> query(" + query + ")", &this->mysql);
 	};
 
 	mysql_close(&this->mysql);
@@ -472,24 +495,30 @@ bool SQL_REQUEST::SQL::isExistQueueAfter20hours()
 {
 	if (!isConnectedBD())
 	{
-		std::cerr << "Error: can't connect to database\n";
+		showErrorBD("SQL_REQUEST::SQL::isExistQueueAfter20hours");
 		return true;
 	}
 
 	const std::string query = "select count(phone) from queue where date_time > '"
 		+ getCurrentDateTimeAfter20hours() + "' and sip = '-1' and answered = '0' and fail = '0' order by date_time desc ";
 
+	if (!isConnectedBD())
+	{
+		showErrorBD("SQL_REQUEST::SQL::isExistQueueAfter20hours");
+		return true;
+	}
+	
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
 		// ошибка считаем что есть запись		
-		std::cerr << mysql_error(&this->mysql);
+		showErrorBD("SQL_REQUEST::SQL::isExistQueueAfter20hours -> query(" + query + ")", &this->mysql);
 		return true;
 	}
 
 	// результат
 	MYSQL_RES *result = mysql_store_result(&this->mysql);
 	MYSQL_ROW row = mysql_fetch_row(result);
-	mysql_free_result(result);
+	mysql_free_result(result);	
 
 	return (std::stoi(row[0]) == 0 ? false : true);
 
@@ -500,7 +529,7 @@ int SQL_REQUEST::SQL::getIVR_totalCalls()
 {
 	if (!isConnectedBD())
 	{
-		std::cerr << "Error: can't connect to database\n";
+		showErrorBD("SQL_REQUEST::SQL::getIVR_totalCalls()");
 		return 0;
 	}
 
@@ -509,7 +538,7 @@ int SQL_REQUEST::SQL::getIVR_totalCalls()
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
 		// ошибка считаем что есть запись		
-		std::cerr << mysql_error(&this->mysql);
+		showErrorBD("SQL_REQUEST::SQL::getIVR_totalCalls -> query(" + query + ")", &this->mysql);
 		return 0;
 	}
 
@@ -518,7 +547,7 @@ int SQL_REQUEST::SQL::getIVR_totalCalls()
 	MYSQL_ROW row = mysql_fetch_row(result);
 	mysql_free_result(result);
 
-	mysql_close(&this->mysql);
+	mysql_close(&this->mysql); // под вопросом?
 
 	return std::stoi(row[0]);
 }
@@ -528,7 +557,7 @@ int SQL_REQUEST::SQL::getIVR_totalCalls(const IVR::CallerID &trunk)
 {
 	if (!isConnectedBD())
 	{
-		std::cerr << "Error: can't connect to database\n";
+		showErrorBD("SQL_REQUEST::SQL::getIVR_totalCalls(1param)");
 		return 0;
 	}
 
@@ -537,7 +566,7 @@ int SQL_REQUEST::SQL::getIVR_totalCalls(const IVR::CallerID &trunk)
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
 		// ошибка считаем что есть запись		
-		std::cerr << mysql_error(&this->mysql);
+		showErrorBD("SQL_REQUEST::SQL::getIVR_totalCalls(1param) -> query(" + query + ")", &this->mysql);
 		return 0;
 	}
 
@@ -546,7 +575,7 @@ int SQL_REQUEST::SQL::getIVR_totalCalls(const IVR::CallerID &trunk)
 	MYSQL_ROW row = mysql_fetch_row(result);
 	mysql_free_result(result);
 
-	mysql_close(&this->mysql);
+	mysql_close(&this->mysql); // под вопросом?
 
 	return std::stoi(row[0]);;
 }
@@ -556,7 +585,7 @@ int SQL_REQUEST::SQL::getQUEUE_Calls(bool answered)
 {
 	if (!isConnectedBD())
 	{
-		std::cerr << "Error: can't connect to database\n";
+		showErrorBD("SQL_REQUEST::SQL::getQUEUE_Calls(1 param)");
 		return 0;
 	}
 	
@@ -579,7 +608,7 @@ int SQL_REQUEST::SQL::getQUEUE_Calls(bool answered)
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
 		// ошибка считаем что есть запись		
-		std::cerr << mysql_error(&this->mysql);
+		showErrorBD("SQL_REQUEST::SQL::getQUEUE_Calls(1param) -> query(" + query + ")", &this->mysql);
 		return 0;
 	}
 }
@@ -588,7 +617,7 @@ int SQL_REQUEST::SQL::getQUEUE_Calls(bool answered)
 	MYSQL_ROW row = mysql_fetch_row(result);
 	mysql_free_result(result);
 
-	mysql_close(&this->mysql);
+	mysql_close(&this->mysql); // под вопросом?
 
 	return std::stoi(row[0]);
 }
@@ -598,7 +627,7 @@ int SQL_REQUEST::SQL::getQUEUE_Calls()
 {
 	if (!isConnectedBD())
 	{
-		std::cerr << "Error: can't connect to database\n";
+		showErrorBD("SQL_REQUEST::SQL::getQUEUE_Calls");
 		return 0;
 	}		
 	 const std::string query = "select count(phone) from queue where date_time > '" + getCurrentStartDay()+"'";
@@ -606,7 +635,7 @@ int SQL_REQUEST::SQL::getQUEUE_Calls()
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
 		// ошибка считаем что есть запись		
-		std::cerr << mysql_error(&this->mysql);
+		showErrorBD("SQL_REQUEST::SQL::getQUEUE_Calls -> query(" + query + ")", &this->mysql);
 		return 0;
 	}
 	
@@ -615,7 +644,7 @@ int SQL_REQUEST::SQL::getQUEUE_Calls()
 	MYSQL_ROW row = mysql_fetch_row(result);
 	mysql_free_result(result);
 
-	mysql_close(&this->mysql);
+	mysql_close(&this->mysql); // под вопросом?
 
 	return std::stoi(row[0]);
 }

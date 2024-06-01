@@ -1,13 +1,14 @@
 //////////////////////////////////////////////////////
 //													//	        
-//			by Petrov Yuri 31.05.2024				//
+//			by Petrov Yuri 01.06.2024				//
 //		внутренние функции не вошедшие в классы 	//
 //													//	
 //////////////////////////////////////////////////////
 
 #include <string>
 #include "Constants.h"
-//#include <mysql/mysql.h>
+#include "SQLRequest.h"
+#include <mysql/mysql.h>
 
 #ifndef INTERNALFUNCTION_H
 #define INTERNALFUNCTION_H
@@ -27,5 +28,9 @@ std::string getCurrentDateTimeAfter20hours();				// текущее время после 20:00
 
 // статистика // пока без класса, может потом в отдельный класс сделать
 void getStatistics();
+
+void showErrorBD(const std::string str); // отображжение инфо что не возможно подключиться к бд
+void showErrorBD(const std::string str, MYSQL *mysql); // отображение инфо что пошла какая то ошибка
+
 
 #endif //INTERNALFUNCTION_H

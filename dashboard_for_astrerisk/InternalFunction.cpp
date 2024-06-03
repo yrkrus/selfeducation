@@ -290,3 +290,5 @@ void showErrorBD(const std::string str, MYSQL *mysql)
 }
 
 
+
+

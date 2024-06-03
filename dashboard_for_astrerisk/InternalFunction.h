@@ -8,13 +8,15 @@
 #include <string>
 #include "Constants.h"
 #include "SQLRequest.h"
+#include "Queue.h"
 #include <mysql/mysql.h>
+
 
 #ifndef INTERNALFUNCTION_H
 #define INTERNALFUNCTION_H
 
 std::string phoneParsing(std::string &phone);					// парсинг номера телефона в нормальный вид
-void getIVR();												// создать + получить текущий IVR
+void getIVR();												    // создать + получить текущий IVR
 void getQueue(void);											// создать + получить текущую очередь
 void getActiveSip(void);										// создать + получить кто с кем разговаривает
 std::string getNumberQueue(CONSTANTS::AsteriskQueue queue);		// получение номера очереди

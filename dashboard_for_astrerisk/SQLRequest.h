@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////
 //													//	        
-//			by Petrov Yuri 01.06.2024				//
+//			by Petrov Yuri 03.06.2024				//
 //				   SQL запросы	             		//
 //													//	
 //////////////////////////////////////////////////////
@@ -19,7 +19,7 @@ namespace SQL_REQUEST
 	{
 	public:
 		SQL();
-		~SQL();
+		~SQL() = default;
 
 		bool isConnectedBD();	// есть ли коннект с БД
 
@@ -45,7 +45,7 @@ namespace SQL_REQUEST
 		void updateQUEUE_fail();				// обновление данных когда звонок не дождался своей очереди 
 		void updateIVR_to_queue(const std::vector<QUEUE::Pacients> &pacient_list); // обновление данных когда у нас звонок из IVR попал в очередь
 		bool isExistQueueAfter20hours(); // проверка есть ли номера которые позвонили после 20:00
-		
+		void updateQUEUE_hash(const std::vector<QUEUE::Pacients> &pacient_list); // обновление поля hash когда успешно поговорили
 
 
 		// Статистика

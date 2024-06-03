@@ -40,12 +40,6 @@ IVR::Parsing::Parsing(const char *fileIVR)
 	fileivr.close();
 }
 
-// деструткор
-IVR::Parsing::~Parsing()
-{
-		
-}
-
 
 IVR::CallerID IVR::getCallerID(std::string str)
 {

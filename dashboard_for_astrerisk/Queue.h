@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////
 //													//	        
-//			by Petrov Yuri 01.06.2024				//
+//			by Petrov Yuri 03.06.2024				//
 //	      парсинг звонков попадающих в Очередь		//
 //													//	
 //////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ namespace QUEUE
 	{
 	public:
 		Parsing(const char *fileQueue);
-		~Parsing();
+		~Parsing() = default;
 
 		bool isExistList();					// есть ли очередь	
 		void show();
@@ -43,8 +43,24 @@ namespace QUEUE
 
 	private:
 		std::string findParsing(std::string str, QUEUE::Currentfind find); // парсинг  
-		std::vector<QUEUE::Pacients> pacient_list;	
-		
+		std::vector<QUEUE::Pacients> pacient_list;			
+	};
+
+
+	struct BD 
+	{
+		std::string id;
+		std::string phone;
+		std::string date_time;
+		size_t hash{0};
+	};
+
+	class QueueBD 
+	{
+		public:
+			QueueBD()	= default;
+			~QueueBD()	= default;
+			std::vector<QUEUE::BD> list;
 	};
 }
 

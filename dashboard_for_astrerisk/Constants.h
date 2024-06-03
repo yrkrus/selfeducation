@@ -13,9 +13,9 @@
 namespace CONSTANTS 
 {
 // debug 
-    const bool DEBUG_MODE{ false };
+    static bool DEBUG_MODE{ true };
 // WKroot#791
-
+       
 
 // asterisk очереди  
 enum AsteriskQueue
@@ -51,10 +51,10 @@ const std::string cActiveSipOperatorsName		= "ActiveSipOperators.txt";
 const std::string cActiveSipOperatorsResponse	= "asterisk -rx \"queue show %queue\" > " + cActiveSipOperatorsName;
 
 //for MySQL Connect
-const std::string cHOST       = "10.34.222.19";
-const std::string cBD         = "dashboard";
-const std::string cLOGIN      = "zabbix";
-const std::string cPASSWORD   = "UFGq4kZMNIMwxTzV";
+static std::string cHOST       = "10.34.222.19";
+static std::string cBD         = "dashboard";
+static std::string cLOGIN      = "zabbix";
+static std::string cPASSWORD   = "UFGq4kZMNIMwxTzV";
 
 };
 

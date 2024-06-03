@@ -28,7 +28,7 @@ QUEUE::Parsing::Parsing(const char *fileQueue)
 
 			pacient.phone	= findParsing(line, QUEUE::Currentfind::phone_find);
 			pacient.waiting = findParsing(line, QUEUE::Currentfind::waiting_find);
-			pacient.queue	= findParsing(line, QUEUE::Currentfind::queue_find);
+			pacient.queue	= findParsing(line, QUEUE::Currentfind::queue_find);			
 
 			// добавляем
 			if (pacient.phone	!= "null" && 
@@ -45,13 +45,13 @@ QUEUE::Parsing::Parsing(const char *fileQueue)
 }
 
 // деструткор
-QUEUE::Parsing::~Parsing()
-{
-	if (!pacient_list.empty())
-	{
-		pacient_list.clear();
-	}
-}
+//QUEUE::Parsing::~Parsing()
+//{
+//	if (!pacient_list.empty())
+//	{
+//		pacient_list.clear();
+//	}
+//}
 
 // проверка пустой ли список в номерами
 bool QUEUE::Parsing::isExistList()
@@ -90,7 +90,8 @@ void QUEUE::Parsing::insertData()
 				base.insertQUEUE(it->queue.c_str(), it->phone.c_str(), it->waiting.c_str());
 			}
 		}
-
+		
+		
 		// находим и обновляем данные если звонок был в очереди, но не дождался ответа от оператора
 		if (base.isConnectedBD()) 
 		{ 
@@ -101,6 +102,12 @@ void QUEUE::Parsing::insertData()
 		if (base.isConnectedBD())
 		{
 			base.updateIVR_to_queue(pacient_list);
+		}
+
+		// находим и обновляем данные когда разговор успешно состоялся 
+		if (base.isConnectedBD()) 
+		{
+			base.updateQUEUE_hash(pacient_list);
 		}
 
 	}	

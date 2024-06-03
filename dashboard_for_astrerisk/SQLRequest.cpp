@@ -11,11 +11,6 @@ SQL_REQUEST::SQL::SQL()
 	createMySQLConnect(this->mysql);
 }
 
-SQL_REQUEST::SQL::~SQL()
-{
-}
-
-
 void SQL_REQUEST::SQL::createMySQLConnect(MYSQL &mysql)
 {
 
@@ -46,6 +41,7 @@ bool SQL_REQUEST::SQL::isConnectedBD()
 {
 	// status = 0 значит коннект есть
 	if (mysql_ping(&this->mysql) != 0) {
+		
 		createMySQLConnect(this->mysql);
 
 		isConnectedBD();
@@ -54,7 +50,6 @@ bool SQL_REQUEST::SQL::isConnectedBD()
 		return true;
 	}	
 }
-
 
 void SQL_REQUEST::SQL::query_test()
 {
@@ -210,7 +205,8 @@ void SQL_REQUEST::SQL::insertQUEUE(const char *queue, const char *phone, const c
 	{
 		showErrorBD("SQL_REQUEST::SQL::insertQUEUE");
 		return;
-	}
+	}	
+
 
 	// проверим есть ли такой номер 	
 	if (isExistQUEUE(queue,phone))
@@ -230,7 +226,7 @@ void SQL_REQUEST::SQL::insertQUEUE(const char *queue, const char *phone, const c
 		if (mysql_query(&this->mysql, query.c_str()) != 0)
 		{
 			showErrorBD("SQL_REQUEST::SQL::insertQUEUE -> Data (insertQUEUE) error -> query(" + query + ")", &this->mysql);
-		}
+		}		
 	}
 
 	mysql_close(&this->mysql);
@@ -244,20 +240,46 @@ bool SQL_REQUEST::SQL::isExistQUEUE(const char *queue, const char *phone)
 	{
 		showErrorBD("SQL_REQUEST::SQL::isExistQUEUE");
 		return true;
+	}	
+
+	{ // эту часть кода проверить!!!!
+		// проверка на повторность, вдруг еще раз перезвонили после того как поговорили уже	
+		const std::string query = "select count(phone) from queue where number_queue = '" + std::string(queue)
+								  +"' and phone = '" + std::string(phone) + "'"
+								  + " and date_time > '" + getCurrentDateTimeAfterMinutes(30) + "'"
+								  + " and answered = '1' and fail = '0' and sip < >'-1'"
+								  + " and hash is not NULL order by date_time desc limit 1";
+
+		if (mysql_query(&this->mysql, query.c_str()) != 0)
+		{
+			// ошибка считаем что есть запись		
+			showErrorBD("SQL_REQUEST::SQL::isExistQUEUE -> query(" + query + ")", &this->mysql);
+			return true;
+		}
+		// результат
+		MYSQL_RES *result = mysql_store_result(&this->mysql);
+		MYSQL_ROW row = mysql_fetch_row(result);
+		mysql_free_result(result);
+
+		if (std::stoi(row[0]) >= 1)
+		{
+			return false;	// если есть запись, значит повторный звонок
+		}
+
 	}
-	
-	// нет разговора проверяем повтрность
+
+
+
+	// правильней проверять сначало разговор	
 	const std::string query = "select count(phone) from queue where number_queue = '" + std::string(queue)
 		+ "' and phone = '" + std::string(phone) + "'"
-		+ " and date_time > '" + getCurrentDateTimeAfterMinutes(15) + "'" //тут типа ок, но время не затрагивается последние 15 мин
-		//+ " and date_time > '" + getCurrentDateTime() + "'"
-		+ " and answered ='0' and fail='0' order by date_time desc limit 1";
-
+		+ " and date_time > '" + getCurrentDateTimeAfterMinutes(30) + "'"
+		+ " and answered ='1' and fail='0' and sip<>'-1' order by date_time desc limit 1";
 
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
 		// ошибка считаем что есть запись		
-		showErrorBD("SQL_REQUEST::SQL::isExistQUEUE -> query("+query+")", &this->mysql);
+		showErrorBD("SQL_REQUEST::SQL::isExistQUEUE -> query(" + query + ")", &this->mysql);
 		return true;
 	}
 
@@ -265,16 +287,19 @@ bool SQL_REQUEST::SQL::isExistQUEUE(const char *queue, const char *phone)
 	MYSQL_RES *result = mysql_store_result(&this->mysql);
 	MYSQL_ROW row = mysql_fetch_row(result);
 	mysql_free_result(result);
-		
-	if (std::stoi(row[0]) >= 1)	{
+
+	if (std::stoi(row[0]) >= 1)
+	{
 		return true;
 	}
 	else {
-		// проверка вдруг ведется разговор
+		// проверяем вдруг в очереди сейчас находится звонок
 		const std::string query = "select count(phone) from queue where number_queue = '" + std::string(queue)
 			+ "' and phone = '" + std::string(phone) + "'"
-			+ " and date_time > '" + getCurrentStartDay() + "'"
-			+ " and answered ='1' order by date_time desc limit 1";
+			+ " and date_time > '" + getCurrentDateTimeAfterMinutes(30) + "'" //тут типа ок, но время не затрагивается последние 15 мин
+			//+ " and date_time > '" + getCurrentDateTime() + "'"
+			+ " and answered ='0' and fail='0' order by date_time desc limit 1";
+
 
 		if (mysql_query(&this->mysql, query.c_str()) != 0)
 		{
@@ -288,11 +313,41 @@ bool SQL_REQUEST::SQL::isExistQUEUE(const char *queue, const char *phone)
 		MYSQL_ROW row = mysql_fetch_row(result);
 		mysql_free_result(result);
 
-		if (std::stoi(row[0]) >= 1) {
-			return true;
-		}	
+		if (std::stoi(row[0]) >= 1)
+		{
+			return true; 
+		}
+		else {
+		
+			// нет разговора проверяем повтрность
+			const std::string query = "select count(phone) from queue where number_queue = '" + std::string(queue)
+				+ "' and phone = '" + std::string(phone) + "'"
+				+ " and date_time > '" + getCurrentDateTimeAfterMinutes(30) + "'" //тут типа ок, но время не затрагивается последние 15 мин
+				//+ " and date_time > '" + getCurrentDateTime() + "'"
+				+ " and answered ='0' and fail='1' order by date_time desc limit 1";
 
-		return (std::stoi(row[0]) == 0 ? false : true);
+
+			if (mysql_query(&this->mysql, query.c_str()) != 0)
+			{
+				// ошибка считаем что есть запись		
+				showErrorBD("SQL_REQUEST::SQL::isExistQUEUE -> query(" + query + ")", &this->mysql);
+				return true;
+			}
+
+			// результат
+			MYSQL_RES *result = mysql_store_result(&this->mysql);
+			MYSQL_ROW row = mysql_fetch_row(result);
+			mysql_free_result(result);
+
+			if (std::stoi(row[0]) >= 1)
+			{
+				return false; // считаем как новый вызов!!!
+			}
+
+			return (std::stoi(row[0]) == 0 ? false : true);
+		
+		}
+		
 	}
 	
 }
@@ -392,8 +447,6 @@ bool SQL_REQUEST::SQL::isExistQUEUE_SIP(const char *phone)
 	MYSQL_RES *result = mysql_store_result(&this->mysql);
 	MYSQL_ROW row = mysql_fetch_row(result);
 	mysql_free_result(result);
-
-	//mysql_close(&this->mysql);
 
 	return (std::stoi(row[0]) == 0 ? false : true);
 }
@@ -520,8 +573,99 @@ bool SQL_REQUEST::SQL::isExistQueueAfter20hours()
 	MYSQL_ROW row = mysql_fetch_row(result);
 	mysql_free_result(result);	
 
+	mysql_close(&this->mysql); // добавил! 01.06.2024
+
 	return (std::stoi(row[0]) == 0 ? false : true);
 
+}
+
+// обновление поля hash когда успешно поговорили
+void SQL_REQUEST::SQL::updateQUEUE_hash(const std::vector<QUEUE::Pacients> &pacient_list)
+{
+	if (!isConnectedBD())
+	{
+		showErrorBD("SQL_REQUEST::SQL::updateQUEUE_hash");
+		return;
+	}	
+
+	// найдем текущие номера которые будем трогать при обновлении
+	std::string list_phone;
+
+	for (const auto &list : pacient_list)
+	{
+		if (list_phone.empty())
+		{
+			list_phone = "'" + list.phone + "'";
+		}
+		else
+		{
+			list_phone = list_phone + ",'" + list.phone + "'";
+		}
+	} 
+
+	QUEUE::QueueBD queuebd;
+	
+	
+	const std::string query = "select id,phone,date_time from queue where date_time > '"
+		+ getCurrentStartDay() + "' and answered = '1' and fail = '0' and hash is NULL and phone not in("+ list_phone+")";
+
+	
+	if (mysql_query(&this->mysql, query.c_str()) != 0)
+	{
+		// ошибка считаем что есть запись		
+		showErrorBD("SQL_REQUEST::SQL::updateQUEUE_hash -> query(" + query + ")", &this->mysql);
+		return;
+	}
+
+	// результат
+	MYSQL_RES *result = mysql_store_result(&this->mysql);
+	MYSQL_ROW row = mysql_fetch_row(result);
+	
+	while ((row = mysql_fetch_row(result)) != NULL)
+	{
+		QUEUE::BD bd;
+		for (int i = 0; i < mysql_num_fields(result); i++)
+		{
+			
+			if (i == 0) {
+				bd.id = row[i];
+			}
+			else if (i == 1) {
+				bd.phone = row[i];
+			}
+			else if (i == 2) {
+				bd.date_time = row[i];
+			}			
+		}
+
+		bd.hash = std::hash<std::string>()(bd.phone+"_"+bd.date_time);
+		queuebd.list.push_back(bd);		
+	}	
+	
+	mysql_free_result(result);
+	
+	// обновляем
+	for (const auto &list : queuebd.list)
+	{
+
+		std::string query = "update queue set hash = '" + std::to_string(list.hash)
+			+ "' where id ='" + list.id
+			+ "' and phone ='" + list.phone
+			+ "' and date_time = '" + list.date_time + "'";
+
+		if (!isConnectedBD())
+		{
+			showErrorBD("SQL_REQUEST::SQL::updateQUEUE_hash");
+			return;
+		}
+
+		if (mysql_query(&this->mysql, query.c_str()) != 0)
+		{
+			showErrorBD("SQL_REQUEST::SQL::updateQUEUE_hash -> Data (updateQUEUE_hash) error -> query(" + query + ")", &this->mysql);
+		};
+
+	};
+	mysql_close(&this->mysql); 
 }
 
 // сколько всего позвонило на линию IVR

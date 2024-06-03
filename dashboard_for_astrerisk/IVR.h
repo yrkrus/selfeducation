@@ -44,7 +44,7 @@ namespace IVR
 	{
 	public:
 		Parsing(const char *fileIVR);
-		~Parsing();			
+		~Parsing() = default;			
 	
 		bool isExistList();						// существет ли очередь IVR		
 		void show();

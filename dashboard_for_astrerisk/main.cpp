@@ -5,6 +5,9 @@
 #include "InternalFunction.h"
 #include "SQLRequest.h"
 #include <thread>
+#include <unordered_map>
+#include <unordered_set>
+
 
 
 
@@ -137,7 +140,7 @@ int main(int argc, char *argv[])
             break;
         }        
         case(test):
-        {                   
+        {         
             test_all();                   
             break;
         }        

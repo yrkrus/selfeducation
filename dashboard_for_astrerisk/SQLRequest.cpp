@@ -242,39 +242,12 @@ bool SQL_REQUEST::SQL::isExistQUEUE(const char *queue, const char *phone)
 		return true;
 	}	
 
-	{ // эту часть кода проверить!!!!
-		// проверка на повторность, вдруг еще раз перезвонили после того как поговорили уже	
-		const std::string query = "select count(phone) from queue where number_queue = '" + std::string(queue)
-								  +"' and phone = '" + std::string(phone) + "'"
-								  + " and date_time > '" + getCurrentDateTimeAfterMinutes(30) + "'"
-								  + " and answered = '1' and fail = '0' and sip < >'-1'"
-								  + " and hash is not NULL order by date_time desc limit 1";
-
-		if (mysql_query(&this->mysql, query.c_str()) != 0)
-		{
-			// ошибка считаем что есть запись		
-			showErrorBD("SQL_REQUEST::SQL::isExistQUEUE -> query(" + query + ")", &this->mysql);
-			return true;
-		}
-		// результат
-		MYSQL_RES *result = mysql_store_result(&this->mysql);
-		MYSQL_ROW row = mysql_fetch_row(result);
-		mysql_free_result(result);
-
-		if (std::stoi(row[0]) >= 1)
-		{
-			return false;	// если есть запись, значит повторный звонок
-		}
-
-	}
-
-
 
 	// правильней проверять сначало разговор	
 	const std::string query = "select count(phone) from queue where number_queue = '" + std::string(queue)
 		+ "' and phone = '" + std::string(phone) + "'"
 		+ " and date_time > '" + getCurrentDateTimeAfterMinutes(30) + "'"
-		+ " and answered ='1' and fail='0' and sip<>'-1' order by date_time desc limit 1";
+		+ " and answered ='1' and fail='0' and sip<>'-1' and hash is NULL order by date_time desc limit 1";
 
 	if (mysql_query(&this->mysql, query.c_str()) != 0)
 	{
@@ -298,7 +271,7 @@ bool SQL_REQUEST::SQL::isExistQUEUE(const char *queue, const char *phone)
 			+ "' and phone = '" + std::string(phone) + "'"
 			+ " and date_time > '" + getCurrentDateTimeAfterMinutes(30) + "'" //тут типа ок, но время не затрагивается последние 15 мин
 			//+ " and date_time > '" + getCurrentDateTime() + "'"
-			+ " and answered ='0' and fail='0' order by date_time desc limit 1";
+			+ " and answered ='0' and fail='0' and hash is NULL order by date_time desc limit 1";
 
 
 		if (mysql_query(&this->mysql, query.c_str()) != 0)
@@ -324,7 +297,7 @@ bool SQL_REQUEST::SQL::isExistQUEUE(const char *queue, const char *phone)
 				+ "' and phone = '" + std::string(phone) + "'"
 				+ " and date_time > '" + getCurrentDateTimeAfterMinutes(30) + "'" //тут типа ок, но время не затрагивается последние 15 мин
 				//+ " and date_time > '" + getCurrentDateTime() + "'"
-				+ " and answered ='0' and fail='1' order by date_time desc limit 1";
+				+ " and answered ='0' and fail='1' and hash is NULL order by date_time desc limit 1";
 
 
 			if (mysql_query(&this->mysql, query.c_str()) != 0)
@@ -343,13 +316,35 @@ bool SQL_REQUEST::SQL::isExistQUEUE(const char *queue, const char *phone)
 			{
 				return false; // считаем как новый вызов!!!
 			}
+			else 
+			{			
+			// проверка на повторность, вдруг еще раз перезвонили после того как поговорили уже	
+				const std::string query = "select count(phone) from queue where number_queue = '" + std::string(queue)
+					+ "' and phone = '" + std::string(phone) + "'"
+					+ " and date_time > '" + getCurrentDateTimeAfterMinutes(30) + "'"
+					+ " and answered = '1' and fail = '0' and sip <>'-1'"
+					+ " and hash is not NULL order by date_time desc limit 1";
 
-			return (std::stoi(row[0]) == 0 ? false : true);
-		
-		}
-		
-	}
-	
+				if (mysql_query(&this->mysql, query.c_str()) != 0)
+				{
+					// ошибка считаем что есть запись		
+					showErrorBD("SQL_REQUEST::SQL::isExistQUEUE -> query(" + query + ")", &this->mysql);
+					return true;
+				}
+				// результат
+				MYSQL_RES *result = mysql_store_result(&this->mysql);
+				MYSQL_ROW row = mysql_fetch_row(result);
+				mysql_free_result(result);
+
+				if (std::stoi(row[0]) >= 1)
+				{
+					return false;	// если есть запись, значит повторный звонок
+				}
+				
+				return (std::stoi(row[0]) == 0 ? false : true);			
+			}		
+		}		
+	}	
 }
 
 // обновление данных в таблице QUEUE

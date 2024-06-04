@@ -13,7 +13,7 @@
 namespace CONSTANTS 
 {
 // debug 
-    static bool DEBUG_MODE{ true };
+    static bool DEBUG_MODE{ false };
 // WKroot#791
        
 

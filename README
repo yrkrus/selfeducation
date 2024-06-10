@@ -10,7 +10,7 @@ parsing_logs
 dashboard_for_astrerisk
 Дашборд для отображенния статистики колл центра на базе asterisk
 core (linux) реализовано!
-https://github.com/yrkrus/selfeducation/blob/main/dashboard_for_astrerisk/core.jpg
+![](https://github.com/yrkrus/selfeducation/blob/main/dashboard_for_astrerisk/core.jpg)
 + БД mysql;
 + кто в ivr;
 + кто в очереди;

@@ -46,7 +46,7 @@ namespace SQL_REQUEST
 		void updateIVR_to_queue(const std::vector<QUEUE::Pacients> &pacient_list); // обновление данных когда у нас звонок из IVR попал в очередь
 		bool isExistQueueAfter20hours(); // проверка есть ли номера которые позвонили после 20:00
 		void updateQUEUE_hash(const std::vector<QUEUE::Pacients> &pacient_list); // обновление поля hash когда успешно поговорили
-
+		
 
 		// Статистика
 		int getIVR_totalCalls();			// сколько всего позвонило на линию IVR

@@ -48,7 +48,6 @@ namespace IVR
 	
 		bool isExistList();						// существет ли очередь IVR		
 		void show();
-
 		void insertData();						//добавление данных в БД
 
 	private:	

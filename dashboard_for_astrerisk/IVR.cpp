@@ -91,13 +91,15 @@ bool IVR::Parsing::isExistList()
 
 void IVR::Parsing::show()
 {	
+	std::ostringstream buffer;
+	
 	if (this->isExistList()) {
-		std::cout << "Line IVR is (" << pacient_list.size() << ")\n";
-		std::cout << "trunk" << "\t    \t" << "phone" << "\t \t" << " wait time" << "\n";
+		buffer << "Line IVR is (" << pacient_list.size() << ")\n";
+		buffer << "trunk" << "\t    \t" << "phone" << "\t \t" << " wait time" << "\n";
 
 		for (std::vector<IVR::Pacients>::iterator it = pacient_list.begin(); it != pacient_list.end(); ++it) {
 				
-			std::cout << getCallerID(it->callerID) << "\t >> \t" << it->phone << "\t (" << it->waiting << ")\n";
+			buffer << getCallerID(it->callerID) << "\t >> \t" << it->phone << "\t (" << it->waiting << ")\n";
 
 			{ // test
 				
@@ -119,32 +121,35 @@ void IVR::Parsing::show()
 				
 				if (found3 != std::string::npos)
 				{
-					std::cout << "найдено";
+					buffer << "найдено";
 				}
 				if (found4 != std::string::npos)
 				{
-					std::cout << "найдено";
+					buffer << "найдено";
 				}
 				if (found5 != std::string::npos)
 				{
-					std::cout << "найдено";
+					buffer << "найдено";
 				}
 				if (found6 != std::string::npos)
 				{
-					std::cout << "найдено";
+					buffer << "найдено";
 				}
 				if (found7 != std::string::npos)
 				{
-					std::cout << "найдено";
+					buffer << "найдено";
 				}				
 			}		
 
 		}			
 	}
 	else {
-		std::cout << "IVR is empty!\n";
-	}	
+		buffer << "IVR is empty!\n";
+	}
+
+	std::cout << buffer.str();
 }
+
 
 // добавление данных в БД
 void IVR::Parsing::insertData()

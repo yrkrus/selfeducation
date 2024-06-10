@@ -18,7 +18,6 @@
 //#endif
 
 
-
 // парсинг номера телефона в нормальный вид
 std::string phoneParsing(std::string &phone)
 {
@@ -50,7 +49,7 @@ void getIVR()
     // разбираем
     IVR::Parsing ivr(CONSTANTS::cIVRName.c_str());
 	if (ivr.isExistList()) {
-		ivr.show();
+		ivr.show();		
 		ivr.insertData();
 	}
 }
@@ -72,7 +71,7 @@ void getQueue(void)
 		// проверим время вдруг кто то позвонил после 20:00:00 и был в очереди, тогда надо пройтись 1 раз по БД
 		if (queue.isExistQueueAfter20hours()) {
 			// есть потеряшки, обновляем данные по ним
-			queue.updateQueueAfter20hours();
+			queue.updateQueueAfter20hours();			
 		}
 	}
 }
@@ -236,6 +235,16 @@ std::string getCurrentDateTimeAfter20hours()
 	return year + "-" + mon + "-" + day + " 20:00:00";
 }
 
+// показ версии ядра
+void showVersionCore()
+{
+	std::ostringstream buffer;
+	buffer << "==========================================================\n";
+	buffer << "\t"<<CONSTANTS::core_version<<"\n";
+	buffer << "==========================================================\n";
+	std::cout << buffer.str();
+}
+
 // статистика // пока без класса, может потом в отдельный класс сделать
 void getStatistics()
 {
@@ -256,7 +265,7 @@ void getStatistics()
 	int totalNull	 = base.getIVR_totalCalls(IVR::null_caller);
 
 
-	buffer << "\n\n\tStatistics QUEUE\n";
+	buffer << "\n\tStatistics QUEUE\n";
 
 	buffer << "total calls IVR\t\t\t" << totalcalls<<"\n";
 	buffer << "total queue \t\t\t" << totalqueue << "\n";
@@ -288,6 +297,12 @@ void showErrorBD(const std::string str, MYSQL *mysql)
 {
 	std::cerr << str <<" " << mysql_error(mysql) <<"\n";
 }
+
+
+
+
+
+
 
 
 

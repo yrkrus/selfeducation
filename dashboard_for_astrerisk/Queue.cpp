@@ -6,6 +6,7 @@
 #include <iterator>
 #include "InternalFunction.h"
 #include "SQLRequest.h"
+#include <sstream>
 
 
 // коструктор
@@ -61,20 +62,25 @@ bool QUEUE::Parsing::isExistList()
 
 void QUEUE::Parsing::show()
 {
+	std::ostringstream buffer;
+	
 	if (isExistList())
 	{
-		std::cout << "Line QUEUE is (" << pacient_list.size() << ")\n";
-		std::cout << "queue" << "\t    \t" << "phone" << "\t \t" << " wait time" << "\n";
+		buffer << "Line QUEUE is (" << pacient_list.size() << ")\n";
+		buffer << "queue" << "\t    \t" << "phone" << "\t \t" << " wait time" << "\n";
 
 		for (std::vector<QUEUE::Pacients>::iterator it = pacient_list.begin(); it != pacient_list.end(); ++it) {
-			std::cout << it->queue << "\t >> \t" << it->phone << "\t (" << it->waiting << ")\n";
+			buffer << it->queue << "\t >> \t" << it->phone << "\t (" << it->waiting << ")\n";
 		}	
 	}
 	else
 	{
-		std::cout << "QUEUE is empty!\n";
+		buffer << "QUEUE is empty!\n";
 	}
+
+	 std::cout << buffer.str();
 }
+
 
 //добавление данных в БД
 void QUEUE::Parsing::insertData() 

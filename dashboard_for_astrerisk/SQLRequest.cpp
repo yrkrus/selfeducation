@@ -614,12 +614,12 @@ void SQL_REQUEST::SQL::updateQUEUE_hash(const std::vector<QUEUE::Pacients> &paci
 
 	// результат
 	MYSQL_RES *result = mysql_store_result(&this->mysql);
-	MYSQL_ROW row = mysql_fetch_row(result);
+	MYSQL_ROW row; 
 	
 	while ((row = mysql_fetch_row(result)) != NULL)
 	{
 		QUEUE::BD bd;
-		for (int i = 0; i < mysql_num_fields(result); i++)
+		for (int i = 0; i < mysql_num_fields(result); ++i)
 		{
 			
 			if (i == 0) {
@@ -662,6 +662,8 @@ void SQL_REQUEST::SQL::updateQUEUE_hash(const std::vector<QUEUE::Pacients> &paci
 	};
 	mysql_close(&this->mysql); 
 }
+
+
 
 // сколько всего позвонило на линию IVR
 int SQL_REQUEST::SQL::getIVR_totalCalls()
@@ -734,12 +736,12 @@ int SQL_REQUEST::SQL::getQUEUE_Calls(bool answered)
 	{
 		case(true):
 		{
-			query = "select count(phone) from queue where date_time > '" + getCurrentStartDay() + "' and answered = '1'";
+			query = "select count(phone) from queue where date_time > '" + getCurrentStartDay() + "' and answered = '1' and hash is not NULL";
 			break;
 		}
 		case(false):
 		{
-			query = "select count(phone) from queue where date_time > '" + getCurrentStartDay() + "' and answered = '0'";
+			query = "select count(phone) from queue where date_time > '" + getCurrentStartDay() + "' and fail = '1'";
 			break;
 		}
 	}

@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <sstream>
 
 #ifndef ACTIVESIP_H
 #define ACTIVESIP_H
@@ -47,7 +48,7 @@ namespace ACTIVE_SIP
 		bool isExistListActiveOperators();
 		void createListActiveOperators();
 
-		void updateData();		//добавление данных в БД
+		void updateData();		//добавление данных в БД	
 
 	private:
 		std::string findParsing(std::string str, Currentfind find, const std::string number_operator);  // парсинг

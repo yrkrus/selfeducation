@@ -4,12 +4,7 @@
 #include "Constants.h"
 #include "InternalFunction.h"
 #include "SQLRequest.h"
-#include <thread>
-#include <unordered_map>
-#include <unordered_set>
-
-
-
+//#include <thread>
 
 // эти include потом убрать, они нужны для отладки только
 #include <stdio.h>
@@ -23,7 +18,8 @@ enum Commands
     queue,          // текущая очередь
     active_sip,     // какие активные sip зарегистрированы в очереди
     connect_bd,     // убрать потом, это для теста
-    test,           // убрать потом, это для теста   
+    start,          // сбор данных в БД   
+    statistics,     // отобразить статистику
 };
 
 // получить команду
@@ -34,13 +30,57 @@ Commands getCommand(char *ch) {
     if (commands == "queue")             return queue;
     if (commands == "active_sip")        return active_sip;
     if (commands == "connect_bd")        return connect_bd;
-    if (commands == "test")              return test;   
+    if (commands == "start")             return start;
+    if (commands == "statistics")        return statistics;
 
     return ivr;                         // default;
 }
 
 
-void test_all() {
+void stat() {
+    int TIK = 6000;
+    // int avg{0};
+    size_t all{ 0 };
+    int min{ 1000 };
+    int max{ 0 };
+
+    for (size_t i = 1; /*i <= TIK*/; ++i)
+    {
+
+        showVersionCore();
+        
+        auto start = std::chrono::steady_clock::now();
+
+        std::cout << getCurrentDateTime() + "\t\titeration: \t" << i << "\n\n";
+
+        getStatistics();
+
+        auto stop = std::chrono::steady_clock::now();
+
+        auto execute_ms = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+
+        std::cout << "\ntime execute code: " << execute_ms.count() << " ms\n";
+        all += execute_ms.count();
+
+        if (execute_ms.count() < min) { min = execute_ms.count(); }
+        if (execute_ms.count() > max) { max = execute_ms.count(); }
+
+        std::cout << "avg execute = " << all / i << " ms | min execute = " << min << " ms | max execute = " << max << " ms\n";
+               
+        sleep(5);
+        system("clear");
+
+        if (i >= 10800)
+        {
+            all = 0;
+            i = 1;
+            int min = 1000;
+            int max = 0;
+        }
+    }
+}
+
+void collect() {
     int TIK = 6000;
    // int avg{0};
     size_t all{ 0 };
@@ -50,16 +90,15 @@ void test_all() {
     for (size_t i = 1; /*i <= TIK*/; ++i)
     {          
 
+        showVersionCore();
+
         auto start = std::chrono::steady_clock::now();
 
-        std::cout  << "\n" + getCurrentDateTime() + "\titeration: \t" << i << "\n\n";       
-       
+        std::cout << getCurrentDateTime() + "\t\titeration: \t" << i << "\n\n";
 
         getIVR();
         getQueue();
-        getActiveSip();
-        
-        getStatistics();
+        getActiveSip();          
 
         auto stop = std::chrono::steady_clock::now();
 
@@ -85,15 +124,14 @@ void test_all() {
             i = 1;
             int min = 1000;
             int max = 0;
-        }
-
-        
+        }        
     }
 }
 
 int main(int argc, char *argv[])
 {
-    setlocale(LC_ALL, "ru_RU.UTF-8");
+    setlocale(LC_ALL, "ru_RU.UTF-8"); 
+
 
     if (argc == 1)
     {
@@ -126,24 +164,24 @@ int main(int argc, char *argv[])
             getActiveSip();
             break;
         }
-        case(connect_bd):
-        {      
+        case(connect_bd): {      
             SQL_REQUEST::SQL base;
             if (base.isConnectedBD()) {
                 std::cout << "Connect UP\n";
             }
             else {
-                std::cout << "Connect DOWN!\n";
-                
-            } 
-            
+                std::cout << "Connect DOWN!\n";                
+            }             
             break;
         }        
-        case(test):
-        {         
-            test_all();                   
+        case(start):      {         
+            collect();
             break;
-        }        
+        }   
+        case(statistics): {
+            stat();
+            break;
+        }
     }
      return 0;
 };

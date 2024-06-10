@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <sstream>
 
 namespace QUEUE
 {
@@ -36,10 +37,12 @@ namespace QUEUE
 		~Parsing() = default;
 
 		bool isExistList();					// есть ли очередь	
-		void show();
+		void show();				
+		
 		void insertData();					// добавление данных в БД
 		bool isExistQueueAfter20hours();	// проверка есть ли не отвеченные записи после 20:00
 		void updateQueueAfter20hours();		// обновление данных если звонок пришел того как нет активных операторов на линии
+		
 
 	private:
 		std::string findParsing(std::string str, QUEUE::Currentfind find); // парсинг  

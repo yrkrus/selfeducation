@@ -3,49 +3,49 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebuggerType>NativeOnly</DebuggerType>
     <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
-    <RemoteDebuggerCommandArguments>test</RemoteDebuggerCommandArguments>
+    <RemoteDebuggerCommandArguments>start</RemoteDebuggerCommandArguments>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
-    <RemoteDebuggerCommandArguments>test</RemoteDebuggerCommandArguments>
+    <RemoteDebuggerCommandArguments>start</RemoteDebuggerCommandArguments>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
-    <RemoteDebuggerCommandArguments>test</RemoteDebuggerCommandArguments>
+    <RemoteDebuggerCommandArguments>start</RemoteDebuggerCommandArguments>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
-    <RemoteDebuggerCommandArguments>test</RemoteDebuggerCommandArguments>
+    <RemoteDebuggerCommandArguments>start</RemoteDebuggerCommandArguments>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
     <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
-    <RemoteDebuggerCommandArguments>test</RemoteDebuggerCommandArguments>
+    <RemoteDebuggerCommandArguments>start</RemoteDebuggerCommandArguments>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
-    <RemoteDebuggerCommandArguments>test</RemoteDebuggerCommandArguments>
+    <RemoteDebuggerCommandArguments>start</RemoteDebuggerCommandArguments>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
-    <RemoteDebuggerCommandArguments>test</RemoteDebuggerCommandArguments>
+    <RemoteDebuggerCommandArguments>start</RemoteDebuggerCommandArguments>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <RemoteDebuggingTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteDebuggingTarget>
-    <RemoteDebuggerCommandArguments>test</RemoteDebuggerCommandArguments>
+    <RemoteDebuggerCommandArguments>start</RemoteDebuggerCommandArguments>
     <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
     <RemoteTarget>-157769292;voip (username=, port=22, authentication=Password)</RemoteTarget>
   </PropertyGroup>

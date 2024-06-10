@@ -8,6 +8,7 @@
 #include <string>
 #include <iterator>
 #include <algorithm>
+#include <sstream>
 
 // коструктор
 ACTIVE_SIP::Parsing::Parsing(const char *fileActiveSip)
@@ -101,18 +102,22 @@ void ACTIVE_SIP::Parsing::createListActiveOperators()
 
 void ACTIVE_SIP::Parsing::show()
 {
+	std::ostringstream buffer;
+	
 	if (this->isExistList()) {
-		std::cout << "Line Active SIP is (" << active_sip_list.size() << ")\n";
-		std::cout << "sip" << "\t    \t" << "phone" << "\t \t" << " talk time" << "\n";
+		buffer << "Line Active SIP is (" << active_sip_list.size() << ")\n";
+		buffer << "sip" << "\t    \t" << "phone" << "\t \t" << " talk time" << "\n";
 
 		for (const auto &list : active_sip_list)
 		{
-			std::cout << list.internal_sip << "\t >> \t" << list.phone << "\t (" << getTalkTime(list.talk_time) << ")\n";
+			buffer << list.internal_sip << "\t >> \t" << list.phone << "\t (" << getTalkTime(list.talk_time) << ")\n";
 		}	
 	}	
 	else {
-		std::cout << "Active SIP is empty!\n";
+		buffer << "Active SIP is empty!\n";
 	}
+
+	std::cout << buffer.str();
 }
 
 // парсинг строки
@@ -264,4 +269,5 @@ void ACTIVE_SIP::Parsing::updateData()
 		}
 	}
 }
+
 

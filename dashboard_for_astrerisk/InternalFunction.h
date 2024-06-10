@@ -28,6 +28,8 @@ std::string getCurrentStartDay();							// текущее начало дня
 std::string getCurrentDateTimeAfterMinutes(int minutes);	// текущее время -(МИНУС) указанная минута 
 std::string getCurrentDateTimeAfter20hours();				// текущее время после 20:00 
 
+void showVersionCore();										// показ версии ядра
+
 // статистика // пока без класса, может потом в отдельный класс сделать
 void getStatistics();
 
